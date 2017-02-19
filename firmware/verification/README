@@ -1,0 +1,2 @@
+test_camera.py : test environment able to drive camera
+	python test_camera.py
