@@ -1,5 +1,11 @@
 # README: prototyp of FarmBot Camera Commander
+#    Current code only focus on prototype behavior, also can be used for basic verificaition
+#    Very limited, only for concept proven.
 # Features:
+#    1. Support CLI
+#    2. start/stop socket command interface
+#    3. support socket input command and response
+#    4. CLI and socket command can be support at the same time.
 # Author:
 #    Wuulong, Created 20/02/2017
 # Arch:
@@ -8,8 +14,11 @@ import threading
 import time
 import socket
 
-VERSION = "0.0.3"
+VERSION = "0.0.4"
 CMD_VERSION = "0.1"
+
+ccli = None
+socket_output = []
 
 #Command socket thread
 class MonitorThread(threading.Thread):
@@ -27,6 +36,7 @@ class MonitorThread(threading.Thread):
         time.sleep(5)
 
     def run(self):
+        global ccli
         bfirst = True
         # Create a TCP/IP socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -55,11 +65,19 @@ class MonitorThread(threading.Thread):
             
                     # Receive the data in small chunks and retransmit it
                     while True:
-                        data = connection.recv(256)
+                        data = connection.recv(16)
                         print("received:%s" % data)
                         if data:
                             print('demo code: echo data back to client')
-                            connection.sendall(data)
+                            if ccli:
+                                #ccli.do_r83("")
+                                ccli.cmd_handler(data)
+                                global socket_output
+                                output = "\n"
+                                if len(socket_output)>0:
+                                    output = "\n".join(socket_output)
+                                    socket_output = []
+                                connection.sendall(output)
                         else:
                             print("no more data from %s,%s" % client_address)
                             break
@@ -112,15 +130,27 @@ class CameraCommanderCli(cmd.Cmd):
             self.monitor_thread.exit=True
         time.sleep(2)
         self.monitor_thread = None
-        
+    def cmd_handler(self,line):
+        try:
+            cmds = line.split("\n")
+            #print("cmd_handler: %s" %(line))
+            for cmd1 in cmds:
+                if cmd1.startswith('R83'):
+                    self.do_r83(cmd1)
+        except:
+            print("cmd_handler have exception, current line = %s" % (line))
 ############ commands  ####################
     def do_r83(self,line):
         """Report software version"""
-        print("V" + VERSION)
-
+        global socket_output
+        output = "V" + VERSION
+        print(output)
+        socket_output.append(output)
 def main():
+    global ccli
     print("----- FarmBot Camera Commander V" + str(VERSION) + " -----")
-    CameraCommanderCli().cmdloop()
+    ccli = CameraCommanderCli()
+    ccli.cmdloop()
 if __name__ == "__main__":
     main()
 
