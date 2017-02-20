@@ -6,8 +6,10 @@
 import cmd
 import threading
 import time
+import socket
 
-VERSION = "0.0.2"
+VERSION = "0.0.3"
+CMD_VERSION = "0.1"
 
 #Command socket thread
 class MonitorThread(threading.Thread):
@@ -25,10 +27,54 @@ class MonitorThread(threading.Thread):
         time.sleep(5)
 
     def run(self):
+        bfirst = True
+        # Create a TCP/IP socket
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        
+        # Bind the socket to the port
+        server_address = ('localhost', 10000)
+        print("starting up on %s port %s" % server_address)
+        sock.bind(server_address)
+        
+        # Listen for incoming connections
+        sock.settimeout(1.0)
+        sock.listen(1)
+        connection = None
         while 1:
             if self.exit:
                 break
-            self.do_function()
+                # Wait for a connection
+            if bfirst:
+                print('waiting for a connection...')
+                bfirst=False
+            try:
+                
+                connection, client_address = sock.accept()
+                if connection:            
+                    print("connection from %s,%s" % client_address)
+            
+                    # Receive the data in small chunks and retransmit it
+                    while True:
+                        data = connection.recv(256)
+                        print("received:%s" % data)
+                        if data:
+                            print('demo code: echo data back to client')
+                            connection.sendall(data)
+                        else:
+                            print("no more data from %s,%s" % client_address)
+                            break
+            except socket.timeout:
+                #timeout is normal
+                pass
+            except :
+                #print("%s:%s" %( socket.error.errno, socket.error.message)) #FIXME
+                pass
+                            
+            finally:
+                # Clean up the connection
+                if connection:
+                    connection.close()
+            #self.do_function()
             self.event.wait(self.wait)
 
 
