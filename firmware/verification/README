@@ -1,5 +1,14 @@
 test_camera.py : test environment able to drive camera
 	python test_camera.py
+
 test_to_network.py : Stream RPi Camera Module Video to network, using Python. 
 	refer: http://helloraspberrypi.blogspot.tw/2015/04/stream-rpi-camera-module-video-to.html
 	python test_to_network.py
+
+echo_server.py, echo_client.py : socket server, client used for check socket interface.
+	python echo_server.py
+	python echo_client.py
+
+camera_commander_prototype.py: prototyp of FarmBot Camera Commander
+	python camera_commander_prototype.py
+	python echo_client.py
