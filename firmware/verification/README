@@ -12,3 +12,6 @@ echo_server.py, echo_client.py : socket server, client used for check socket int
 camera_commander_prototype.py: prototyp of FarmBot Camera Commander
 	python camera_commander_prototype.py
 	python echo_client.py
+
+test_serial.py : verification code to verify serial connection
+	python test_serial.py
