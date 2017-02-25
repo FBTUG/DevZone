@@ -15,3 +15,7 @@ camera_commander_prototype.py: prototyp of FarmBot Camera Commander
 
 test_serial.py : verification code to verify serial connection
 	python test_serial.py
+
+serial_commands_list.txt: test_serial.py input when ver_cmd_mode=True
+
+serial_commands_result.txt : current verification result of test_serial.py when ver_cmd_mode=True
