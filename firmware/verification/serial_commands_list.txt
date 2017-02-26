@@ -1,29 +1,31 @@
-F83		#Report software version
-F83		#Report software version
-G00 X2 Y2 Z2	#Move to location at given speed for axis (don't have to be a straight line), in absolute coordinates
-#G01	X Y Z S	#Move to location on a straight line
-G28		#Move home all axis
-#F01	T	#Dose amount of water using time in millisecond
-#F02	N	#Dose amount of water using flow meter that measures pulses
-F11		#Home X axis
-F12		#Home Y axis
-F13		#Home Z axis
-F14		#Calibrate X axis
-F15		#Calibrate Y axis
-F16		#Calibrate Z axis
-F20		#List all parameters and value
-F21 P2	#Read parameter
-#F22	P V	#Write parameter
-#F23	P V	#Update parameter (during calibration)
-#F31	P	#Read status
-#F32	P V	#Write status
-#F41	P V M	#Set a value V on an arduino pin in mode M (digital=0/analog=1)
-#F42	P M	#Read a value from an arduino pin P in mode M (digital=0/analog=1)
-#F43	P M	#Set the I/O mode M (input=0/output=1) of a pin P in arduino
-#F44	P V W T M	#Set the value V on an arduino pin P, wait for time T in milliseconds, set value W on the arduino pin P in mode M (digital=0/analog=1)
-#F51	E P V	#Set a value on the tool mount with I2C (not implemented)
-#F52	E P	#Read value from the tool mount with I2C (not implemented)
-#F61	P V	#Set the servo on the pin P (only pin 4 and 5) to the requested angle V
-F81		#Report end stop
-F82		#Report current position
-E		#Emergency stop
+#Current Debug
+F83#Report software version
+F83#Report software version
+F20#List all parameters and value
+F21 P2#Read parameter
+F22 P2 V2#Write parameter
+F23 P2 V2#Update parameter (during calibration)
+F31 P2#Read status
+F32 P2 V2#Write status
+F41 P1 V1 M0#Set a value V on an arduino pin in mode M (digital=0/analog=1)
+F42 P1 M0#Read a value from an arduino pin P in mode M (digital=0/analog=1)
+F43 P1 M0#Set the I/O mode M (input=0/output=1) of a pin P in arduino
+F44 P1 V1 W0 T10 M0#Set the value V on an arduino pin P, wait for time T in milliseconds, set value W on the arduino pin P in mode M (digital=0/analog=1)
+#F51 E P V#Set a value on the tool mount with I2C (not implemented)
+#F52 E P#Read value from the tool mount with I2C (not implemented)
+F61 P4 V10#Set the servo on the pin P (only pin 4 and 5) to the requested angle V
+F81#Report end stop
+F82#Report current position
+E#Emergency stop
+#Long Wait Commands
+G00 X2 Y2 Z2#Move to location at given speed for axis (don't have to be a straight line), in absolute coordinates
+G01 X2 Y2 Z2 S1#Move to location on a straight line
+G28#Move home all axis
+F01 T10#Dose amount of water using time in millisecond
+F02 N10#Dose amount of water using flow meter that measures pulses
+F11#Home X axis
+F12#Home Y axis
+F13#Home Z axis
+F14#Calibrate X axis
+F15#Calibrate Y axis
+F16#Calibrate Z axis
