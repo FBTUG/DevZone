@@ -1,6 +1,7 @@
 #Current Debug
 F83#Report software version
 F83#Report software version
+#Short Commands
 F20#List all parameters and value
 F21 P2#Read parameter
 F22 P2 V2#Write parameter

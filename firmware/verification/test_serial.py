@@ -12,15 +12,52 @@ from serial import *
 import time
 import sys
 
+CMDSTATE_R00 = 0 #idle
+CMDSTATE_R01 = 1 #running
+CMDSTATE_R02 = 2 #end success
+CMDSTATE_R03 = 3 #end with error
+CMDSTATE_R04 = 4 #running
+
+class CmdState:
+    def __init__(self):
+        self.cmd_curid = ""
+        self.cmd_curpar = ""
+        self.cmd_str = ""
+        self.cmd_state = CMDSTATE_R00
+    def is_ready(self):
+        if self.cmd_state == CMDSTATE_R00 or self.cmd_state == CMDSTATE_R02 or self.cmd_state == CMDSTATE_R03:
+            return True
+        else:
+            return False
+    def set_by_send(self, cmd_str):
+        if self.is_ready():
+            self.cmd_state = CMDSTATE_R00
+            self.cmd_str =  cmd_str
         
+    def set_by_recv(self, cmd_str):
+        cmd_str1 = cmd_str.strip()
+        if cmd_str1 == "R00":
+            self.cmd_state = CMDSTATE_R00
+        if cmd_str1 == "R01":
+            self.cmd_state = CMDSTATE_R01
+        if cmd_str1 == "R02":
+            self.cmd_state = CMDSTATE_R02
+        if cmd_str1 == "R03":
+            self.cmd_state = CMDSTATE_R03
+        if cmd_str1 == "R04":
+            self.cmd_state = CMDSTATE_R04
+        self.cmd_str = cmd_str
+        #print("state by recv:%i" %(self.cmd_state))
+
 #Serial process thread
 class MonitorThread(threading.Thread):
-    def __init__(self, ser, wait=0.01):
+    def __init__(self, wait=0.01):
         threading.Thread.__init__(self)
         self.event = threading.Event()
         self.wait = wait
         self.exit = False
-        self.ser = ser
+        self.ser = Serial('/dev/cu.usbmodem1421', 115200, timeout=1) #FIXME, change device id to your system device
+        self.cmd_state = CmdState()
 
     def set_ts(self, ts):
         self.wait = ts
@@ -31,7 +68,8 @@ class MonitorThread(threading.Thread):
         if len(line)>0:
             #print(line)
             sys.stdout.write(line)
-
+            self.cmd_state.set_by_recv(line)
+    
     def run(self):
         while 1:
             if self.exit:
@@ -40,42 +78,50 @@ class MonitorThread(threading.Thread):
             self.do_function()
             self.event.wait(self.wait)
 
+    def serial_send(self,send_str):
+        sys.stdout.write("[%s]\n" % send_str)
+        self.ser.write(send_str + "\n")
+        self.cmd_state.set_by_send(send_str)
 def main():
-    ser = Serial('/dev/cu.usbmodem1421', 115200, timeout=1) #FIXME, change device id to your system device
-    th = MonitorThread(ser)
+    
+    th = MonitorThread()
     th.start()
 
+    cmd_delay_second =1
+    wait_ready_second =3 
     ver_cmd_mode = True
         
     while 1:
         try:
-            if ver_cmd_mode == True:
-                ver_commands(ser)
+            if ver_cmd_mode == True: # verify current commands.
+                cmd_file = open("serial_commands_list.txt", "r")
+                lines = cmd_file.readlines()
+                for line in lines:
+                    cols = line.split("#")
+                    if len(cols)>1:
+                        cmd = cols[0]
+                        cmd = cmd.strip()
+                        if len(cmd)>0:
+                            #print(cmd)
+                            while 1:
+                                if th.cmd_state.is_ready(): #wait system ready to accept commands
+                                    th.serial_send("%s" %cmd)
+                                    break
+                                else:
+                                    time.sleep(wait_ready_second)
+                            #ser.write("F83\n")
+                    time.sleep(cmd_delay_second)
+                cmd_file.close()
+                
                 th.exit = True
                 break
             else:
-                ser.write("F83\n")
+                th.serial_send("F83\n")
                 time.sleep(1)
         except:
             th.exit = True
             break
 
-def ver_commands(ser):
-    cmd_file = open("serial_commands_list.txt", "r")
-    lines = cmd_file.readlines()
-    for line in lines:
-        cols = line.split("#")
-        if len(cols)>1:
-            cmd = cols[0]
-            cmd = cmd.strip()
-            if len(cmd)>0:
-                #print(cmd)
-                sys.stdout.write("[%s]\n" % cmd)
-                ser.write("%s\n" %cmd)
-                #ser.write("F83\n")
-        time.sleep(3)
-    cmd_file.close()
-    
 if __name__ == "__main__":
     main()
 
