@@ -111,8 +111,10 @@ def main():
                 cmd_file = open(file_name, "r")
                 lines = cmd_file.readlines()
                 for line in lines:
+                    
                     cols = line.split("#")
-                    if len(cols)>1:
+                    #print("line=%s,cols_count=%i" %(line,len(cols)))
+                    if len(cols)>=1:
                         cmd = cols[0]
                         cmd = cmd.strip()
                         if len(cmd)>0:
