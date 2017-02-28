@@ -18,6 +18,10 @@ CMDSTATE_R02 = 2 #end success
 CMDSTATE_R03 = 3 #end with error
 CMDSTATE_R04 = 4 #running
 
+RUNMODE_CHECKIF = 1
+RUNMODE_VERIFY_CMDS=2
+RUNMODE_CMDSCRIPT=3
+
 class CmdState:
     def __init__(self):
         self.cmd_curid = ""
@@ -82,6 +86,7 @@ class MonitorThread(threading.Thread):
         sys.stdout.write("[%s]\n" % send_str)
         self.ser.write(send_str + "\n")
         self.cmd_state.set_by_send(send_str)
+
 def main():
     
     th = MonitorThread()
@@ -89,12 +94,21 @@ def main():
 
     cmd_delay_second =1
     wait_ready_second =3 
-    ver_cmd_mode = True
+    run_mode = RUNMODE_VERIFY_CMDS # RUNMODE_CHECKIF, RUNMODE_VERIFY_CMDS, RUNMODE_CMDSCRIPT, 
+    
+    file_name = "serial_commands_list.txt"
+    if run_mode == RUNMODE_CMDSCRIPT:
+        file_name = "serial_script.txt"
+    
         
     while 1:
         try:
-            if ver_cmd_mode == True: # verify current commands.
-                cmd_file = open("serial_commands_list.txt", "r")
+            if run_mode == RUNMODE_CHECKIF:
+                th.serial_send("F83")
+                time.sleep(1)
+                
+            else : # verify current commands.
+                cmd_file = open(file_name, "r")
                 lines = cmd_file.readlines()
                 for line in lines:
                     cols = line.split("#")
@@ -115,9 +129,7 @@ def main():
                 
                 th.exit = True
                 break
-            else:
-                th.serial_send("F83\n")
-                time.sleep(1)
+
         except:
             th.exit = True
             break
