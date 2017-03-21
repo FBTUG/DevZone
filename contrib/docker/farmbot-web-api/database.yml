@@ -1,0 +1,20 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  database: farmbot_development
+  pool: 5
+  username: postgres
+  password: mysecretpassword
+  host: postgres
+
+development:
+  database: farmbot_development
+  <<: *default
+
+test:
+  database: farmbot_test
+  <<: *default
+
+production:
+  database: farmbot_prod
+  <<: *default
