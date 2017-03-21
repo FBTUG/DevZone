@@ -1,0 +1,10 @@
+version: '2'
+services:
+  fapi :
+    build: .
+    image: y12docker/farmbotapi:latest
+    command: tail -f /dev/null
+  postgres:
+    image: postgres:9.6
+    environment:
+        - POSTGRES_PASSWORD=mysecretpassword
