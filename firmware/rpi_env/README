@@ -1,0 +1,14 @@
+This directory target to provide tools, code, script, image that used in FBTUG RPI platform. 
+
+Setup procedure:
+. setup RASPBIAN
+https://www.raspberrypi.org/downloads/raspbian/
+
+Setup SD card, Power on for environment test
+    sudo dd if=./2017-01-11-raspbian-jessie.img of=/dev/disk3 bs=4000000
+    (2105299 bytes/sec)
+from RPI desktop menu-> Raspberry Pi Configuration
+    Select SSH -> will be able use pi/raspberry to login by ssh
+
+ssh pi@YOUR_IP  => can use in mac/ubuntu@virtualbox
+
