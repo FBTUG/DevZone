@@ -60,7 +60,7 @@ class MonitorThread(threading.Thread):
         self.event = threading.Event()
         self.wait = wait
         self.exit = False
-        self.ser = Serial('/dev/cu.usbmodem1421', 115200, timeout=1) #FIXME, change device id to your system device
+        self.ser = Serial('/dev/cu.usbmodem1411', 115200, timeout=1) #FIXME, change device id to your system device
         self.cmd_state = CmdState()
 
     def set_ts(self, ts):
@@ -84,7 +84,7 @@ class MonitorThread(threading.Thread):
 
     def serial_send(self,send_str):
         sys.stdout.write("[%s]\n" % send_str)
-        self.ser.write(send_str + "\n")
+        self.ser.write(send_str + "\r\n")
         self.cmd_state.set_by_send(send_str)
 
 def main():
@@ -94,7 +94,7 @@ def main():
 
     cmd_delay_second =1
     wait_ready_second =3 
-    run_mode = RUNMODE_VERIFY_CMDS # RUNMODE_CHECKIF, RUNMODE_VERIFY_CMDS, RUNMODE_CMDSCRIPT, 
+    run_mode = RUNMODE_CMDSCRIPT # RUNMODE_CHECKIF, RUNMODE_VERIFY_CMDS(default), RUNMODE_CMDSCRIPT, 
     
     file_name = "serial_commands_list.txt"
     if run_mode == RUNMODE_CMDSCRIPT:
@@ -122,6 +122,7 @@ def main():
                             while 1:
                                 if th.cmd_state.is_ready(): #wait system ready to accept commands
                                     th.serial_send("%s" %cmd)
+                                    time.sleep(wait_ready_second)
                                     break
                                 else:
                                     time.sleep(wait_ready_second)

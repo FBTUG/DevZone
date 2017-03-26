@@ -1,9 +1,8 @@
 #Current Debug
-F83#Report software version
-F83#Report software version
-F81#Report end stop
-F82#Report current position
-G00 X10 Y-10 Z-2#Move to location at given speed for axis (don't have to be a straight line), in absolute coordinates
-G00 X20 Y-10 Z-2#Move to location at given speed for axis (don't have to be a straight line), in absolute coordinates
-G00 X10 Y-10 Z-2#Move to location at given speed for axis (don't have to be a straight line), in absolute coordinates
+G00 X-500 Y0 Z0#Move to location at given speed for axis (don't have to be a straight line), in absolute coordinates
+F41 P10 V1 M0
+G00 X-1000 Y0 Z0#Move to location at given speed for axis (don't have to be a straight line), in absolute coordinates
+F41 P10 V0 M0
+G00 X-1500 Y0 Z0#Move to location at given speed for axis (don't have to be a straight line), in absolute coordinates
+G00 X0 Y0 Z0
 F83#Report software version
