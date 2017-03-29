@@ -4,16 +4,15 @@
 * docker-compose
 
 ### Usage
-* hostip example = 192.168.2.73
+
+* docker host IP address (example) = 192.168.2.73
 * url = http://192.168.2.73:3000
 
 ```
 $ git clone --depth=1 https://github.com/FBTUG/DevZone.git
-$ cd DevZone/contrib/docker/frambot-web-api
+$ cd DevZone/contrib/docker/frambot
 
-$ nano docker-compose.yml
-// API_HOST=192.168.2.73
-// MQTT_HOST=192.168.2.73
+// Find and replace APT_HOST/MQTT_HOST with the IP address of the docker host in the docker-compose.yml
 
 $ docker-compose build
 $ docker-copmose up -d
