@@ -1,0 +1,26 @@
+version: '2'
+services:
+  fapi :
+    build: webapi
+    image: fbtug/farmbotapi
+    environment:
+      - API_HOST=192.168.2.73
+      - API_PORT=3000
+      - MQTT_HOST=192.168.2.73
+    ports:
+      - "3000:3000"
+    command: sh -c 'sleep 10 ; /start.sh'
+  mqtt :
+      build: mqtt
+      image: fbtug/mqtt
+      environment:
+        - WEB_API_URL=http://fapi:3000
+      ports:
+        - "3002:3002"
+        - "443:443"
+        - "1883:1883"
+      command: sh -c 'sleep 40 ; npm start'
+  postgres:
+    image: postgres:9.6
+    environment:
+        - POSTGRES_PASSWORD=mysecretpassword
