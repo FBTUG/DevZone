@@ -5,8 +5,10 @@
 
 ### Usage
 
-* docker host IP address (example) = 192.168.2.73
-* url = http://192.168.2.73:3000
+* docker host IP address (example): 192.168.2.73
+* farmbot web url: http://192.168.2.73:3000
+* account admin email: notos@notos.com
+* account admin password: password123
 
 ```
 $ git clone --depth=1 https://github.com/FBTUG/DevZone.git
