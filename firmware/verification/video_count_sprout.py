@@ -23,24 +23,26 @@ reSize=(1000,563)
 if __name__ =='__main__':
     #ex: python test_video_to_frames.py -v video-1493972721.mp4 -t 20170304010203 -g 3600 -d images
     try:
-        opts,args = getopt.getopt(sys.argv[1:], "hv:d:t:g:", [])
+        opts,args = getopt.getopt(sys.argv[1:], "hv:d:t:g:r:", [])
     except getopt.GetoptError:
-        print ('opterro: test_video_to_frames.py [ -h ] [ -v ] [ -d ] [ -t ] [ -g ]')       
+        print ('opterro: test_video_to_frames.py [ -h ] [ -v ] [ -d ] [ -t ] [ -g ] [ -r ]')       
         sys.exit(2) 
         
     dir = 'images'
-    video ="abc.mp4" #"video-1493972721.mp4"
-    starttime_str = '20170507010203'
-    starttime = datetime.datetime.strptime(starttime_str, '%Y%m%d%H%M%S')  
+    video ="video-1493972721.mp4" #"video-1493972721.mp4"
+    starttime_str = '20170504101133'
+    starttime = datetime.datetime.strptime(starttime_str, '%Y%m%d%H%M%S') 
+    ref = starttime_str 
     seconds = 1*60*60 
     for opt, arg in opts:
         #print(arg)
         if opt == '-h':
-            print ('exe_cmd [ -h ] [ -v ] [ -d ] [ -t ] [-g]')
+            print ('exe_cmd [ -h ] [ -v ] [ -d ] [ -t ] [-g] [-r]')
             print ('    -v: video pathname')
             print ('    -d: output directory')
             print ('    -t: start time, ex: 20170507010203')
             print ('    -g: frames gap time in seconds. default: 3600')
+            print ('    -r: reference frame. default: first frame')
             sys.exit()
         elif opt in ("-v"):
             video = arg  
@@ -50,9 +52,10 @@ if __name__ =='__main__':
             starttime_str = arg
             #print("starttime_str" + starttime_str)
             starttime = datetime.datetime.strptime(starttime_str, '%Y%m%d%H%M%S')
-        elif opt in ("-g", "--gap"):
+        elif opt in ("-g"):
             seconds = int(arg)
-
+        elif opt in ("-r"):
+            ref = arg
     if not os.path.isdir(dir):
         os.mkdir(dir)
     if not os.path.isfile(video):
@@ -78,7 +81,8 @@ if __name__ =='__main__':
 
     # travel images to count Sprout
     # by default use first image as reference
-    first_pathname = os.path.join(dir,"image_{:s}.jpg".format(starttime_str))
+    first_pathname = os.path.join(dir,"image_{:s}.jpg".format(ref))
+    
     #list_of_files = {}
     objSprout = SPROUT(cv2.imread(first_pathname), reSize, (5,5), 120, 2,4)
 
