@@ -84,11 +84,14 @@ if __name__ =='__main__':
     first_pathname = os.path.join(dir,"image_{:s}.jpg".format(ref))
     
     #list_of_files = {}
-    objSprout = SPROUT(cv2.imread(first_pathname), reSize, (5,5), 120, 2,4)
-
+    #objSprout = SPROUT(cv2.imread(first_pathname), reSize, (5,5), 120, 2,4)
+    objSprout = SPROUT(reSize=reSize, vBlur=(3,3), vThresh=160, vErode=1, vDilate=1, debug=False)
+    numNoSprout = objSprout.countSprout(cv2.imread(first_pathname),40)
     for (dirpath, dirnames, filenames) in os.walk(dir):
         for filename in sorted(filenames):
             if filename.endswith('.jpg'): 
                 filename_cur = os.sep.join([dirpath, filename])
-                numSprout = objSprout.countSprout(cv2.imread(filename_cur)) - objSprout.notSprout
-                print("%s,%i" %(filename_cur,numSprout))
+                #numSprout = objSprout.countSprout(cv2.imread(filename_cur)) - objSprout.notSprout
+                numSprout = objSprout.countSprout(cv2.imread(filename_cur), 40)
+                countSprout = (numSprout-numNoSprout) if (numSprout-numNoSprout>0) else 0
+                print("%s,%i" %(filename_cur,countSprout))
