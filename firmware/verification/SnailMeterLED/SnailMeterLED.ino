@@ -24,7 +24,7 @@ const uint16_t ledCount = 7;
 rgb_color colors[ledCount];
 
 // Set the brightness to use (the maximum is 31).
-const uint8_t brightness = 1;
+const uint8_t brightness = 31;
 
 rgb_color Rgb(uint8_t r, uint8_t g, uint8_t b)
 {
@@ -63,7 +63,6 @@ void set_color(uint8_t r, uint8_t g, uint8_t b){
   for(uint16_t i = 0; i < ledCount; i++)
   {
     colors[i] = Rgb(r,g,b);
-
   }
 
   ledStrip.write(colors, ledCount, brightness);
@@ -73,20 +72,23 @@ void loop() {
    int c = Serial1.read();
    if (c != -1) {
       switch(c) {
-        case '0':
+        case '0': // test purpose
            digitalWrite(13, 0);
            break;
-        case '1':
+        case '1': // test purpose
            digitalWrite(13, 1);
            break;
         case 'R':
+        case 'r':
           set_color(255,0,0);
           break;
         case 'G':
+        case 'g':
           set_color(0,255,0);
           break;
-        case 'B':
-          set_color(0,0,255);
+        case 'Y':
+        case 'y':
+          set_color(255,255,0);
           break;
         
       break; }
