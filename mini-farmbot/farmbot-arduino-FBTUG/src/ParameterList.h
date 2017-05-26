@@ -127,7 +127,8 @@ enum ParamListEnum
   //
   // counts of square waves
   //
-  WATER_FLOW_COUNTS = 300
+  WATER_FLOW_COUNTS = 300,
+  WATER_FLOW_TIME_RATIO = 301
 };
 
 /*

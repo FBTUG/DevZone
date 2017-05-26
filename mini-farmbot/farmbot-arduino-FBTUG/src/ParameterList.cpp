@@ -481,7 +481,9 @@ void ParameterList::loadDefaultValue(int id)
   case WATER_FLOW_COUNTS:
     paramValues[id] = WATER_FLOW_1L_COUNTS_DEFAULT;
     break;
-
+  case WATER_FLOW_TIME_RATIO:
+    paramValues[id] = WATER_FLOW_100ML_TIME_DEFAULT;
+    break;
   default:
     paramValues[id] = 0;
     break;
@@ -572,6 +574,7 @@ bool ParameterList::validParam(int id)
   case PIN_GUARD_5_TIME_OUT:
   case PIN_GUARD_5_ACTIVE_STATE:
   case WATER_FLOW_COUNTS:
+  case WATER_FLOW_TIME_RATIO:
     return true;
   default:
     return false;

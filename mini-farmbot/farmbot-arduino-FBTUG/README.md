@@ -1,3 +1,10 @@
+Modify F01 handle by Joe Hou
+==========================
+Support two commands (T & N)
+Ex:
+"F01 N200\n" :  Watering 200ml and stop.
+"F01 T200\n" :  Watering 200ms and stop.
+
 Add F01/F02/Servo command by Joe Hou
 ==========================
 1. Add F01 handle --Dose amount of water using time in millisecond
@@ -129,7 +136,7 @@ Z_ENCDR_B        |  29  | Z axis encoder B channel
 Z_ENCDR_A_Q      |  39  | Z axis encoder A channel for quarature (not implemented)
 Z_ENCDR_B_Q      |  41  | Z axis encoder B channel for quarature (not implemented)
 LED_PIN          |  13  | on board LED
-FAN_PIN          |   9  | RAMPS board fan pin
+WATER_PIN        |   9  | RAMPS board Water pin
 HEATER_0_PIN     |  10  | RAMPS board heating pin 0
 HEATER_1_PIN     |   8  | RAMPS board heating pin 1
 SERVO_0_PIN	     |   4  | Servo motor 0 signal pin
@@ -147,8 +154,8 @@ G        |00    |X Y Z S   |Move to location at given speed for axis (don't have
 G        |01    |X Y Z S   |Move to location on a straight line
 G        |28    |          |Move home all axis
 F        |      |          |Farm commands, commands specially added for the farmbot
-F        |01    |T         |Dose amount of water using time in millisecond
-F        |02    |N         |Dose amount of water using flow meter that measures pulses
+F        |01    |T  N      |Dose amount of water using time in millisecond  (ms/ml)
+F        |02    |N         |Dose amount of water using flow meter that measures pulses (ml)
 F        |11    |          |Home X axis
 F        |12    |          |Home Y axis
 F        |13    |          |Home Z axis
@@ -327,7 +334,7 @@ ID   | Name
 222  | PIN_GUARD_5_TIME_OUT
 223  | PIN_GUARD_5_ACTIVE_STATE
 300  | WATER_FLOW_COUNTS
-
+301  | WATER_FLOW_TIME_RATIO
 
 IMPORTANT
 =========
