@@ -1,13 +1,12 @@
 Add T01 handle by Joe Hou
 ==========================
-Support T01 command for Soil Sonser test
-Usage:
-"F42 P59 M1\n"  : Get Soil Sonser value.
-"F22 P302 V518" : Set High value of the Soil Sonser.
-"F22 P303 V250" : Set Low value of the Soil Sonser.
-
-"T01 V1\n" :  Enable the timer event to watching the Soil Sonser(%)
-"T01 V0\n" :  Dnable the timer event to close the Soil Sonser(%)
+Support T01 command for Soil Sensor test
+*Usage:
+1. "F42 P59 M1\n"  : Get Soil Sensor value.
+2. "F22 P302 V518" : Set High value of the Soil Sensor.
+3. "F22 P303 V250" : Set Low value of the Soil Sensor.
+4. "T01 V1\n" :  Enable the timer event to watching the Soil Sensor(%)
+5. "T01 V0\n" :  Dnable the timer event to close the Soil Sensor(%)
 
 Modify F01 handle by Joe Hou
 ==========================

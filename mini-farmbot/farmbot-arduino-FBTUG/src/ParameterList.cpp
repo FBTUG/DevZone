@@ -484,11 +484,11 @@ void ParameterList::loadDefaultValue(int id)
   case WATER_FLOW_TIME_RATIO:
     paramValues[id] = WATER_FLOW_100ML_TIME_DEFAULT;
     break;
-  case SOIL_SONSER_HIGH:
-    paramValues[id] = SOIL_SONSER_HIGH_DEFAULT;
+  case SOIL_SENSOR_HIGH:
+    paramValues[id] = SOIL_SENSOR_HIGH_DEFAULT;
     break;
-  case SOIL_SONSER_LOW:
-    paramValues[id] = SOIL_SONSER_LOW_DEFAULT;
+  case SOIL_SENSOR_LOW:
+    paramValues[id] = SOIL_SENSOR_LOW_DEFAULT;
     break;
   default:
     paramValues[id] = 0;
@@ -581,8 +581,8 @@ bool ParameterList::validParam(int id)
   case PIN_GUARD_5_ACTIVE_STATE:
   case WATER_FLOW_COUNTS:
   case WATER_FLOW_TIME_RATIO:
-  case SOIL_SONSER_HIGH:
-  case SOIL_SONSER_LOW:
+  case SOIL_SENSOR_HIGH:
+  case SOIL_SENSOR_LOW:
     return true;
   default:
     return false;

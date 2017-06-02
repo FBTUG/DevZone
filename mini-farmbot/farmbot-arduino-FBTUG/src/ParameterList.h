@@ -10,7 +10,7 @@
 const int PARAM_NR_OF_PARAMS = 350;
 
 //
-// Index of EEPROM 
+// Index of EEPROM
 //
 
 enum ParamListEnum
@@ -129,8 +129,8 @@ enum ParamListEnum
   //
   WATER_FLOW_COUNTS = 300,
   WATER_FLOW_TIME_RATIO = 301,
-  SOIL_SONSER_HIGH = 302,
-  SOIL_SONSER_LOW = 303
+  SOIL_SENSOR_HIGH = 302,
+  SOIL_SENSOR_LOW = 303
 };
 
 /*

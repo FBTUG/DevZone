@@ -28,14 +28,14 @@ ISR(TIMER3_COMPB_vect)
 {
   int val;
   int SoilRate;
-  int SoilSonserHigh;
-  int SoilSonserLow;
+  int SoilSensorHigh;
+  int SoilSensorLow;
   volatile double PercentageIndex = 0;;
 
   val = analogRead(5); //connect sensor to Analog 0
 
-  SoilSonserHigh = ParameterList::getInstance()->getValue(SOIL_SONSER_HIGH);
-  SoilSonserLow = ParameterList::getInstance()->getValue(SOIL_SONSER_LOW);
+  SoilSensorHigh = ParameterList::getInstance()->getValue(SOIL_SENSOR_HIGH);
+  SoilSensorLow = ParameterList::getInstance()->getValue(SOIL_SENSOR_LOW);
   // Serial.print("Water Soil = "); //print the value to serial
   // Serial.print(val); //print the value to serial
   // Serial.print("\n"); //print the value to serial
@@ -43,8 +43,8 @@ ISR(TIMER3_COMPB_vect)
   //  Val:518 = 0% , 250 = 100%
   //  1% = 518-250 = 268 * 0.01 = 2.68
   //
-  PercentageIndex = (SoilSonserHigh - SoilSonserLow) * 0.01;
-  SoilRate = 100 - ((val - SoilSonserLow)/PercentageIndex);
+  PercentageIndex = (SoilSensorHigh - SoilSensorLow) * 0.01;
+  SoilRate = 100 - ((val - SoilSensorLow)/PercentageIndex);
   Serial.print("Soil Rate = "); //print the value to serial
   Serial.print(SoilRate); //print the value to serial
   Serial.print("\%\n "); //print the value to serial
@@ -78,7 +78,6 @@ int T01Handler::execute(Command *command)
 {
   int Cmd = 0;
 
- // WaterCountsDefault = ParameterList::getInstance()->getValue(WATER_FLOW_COUNTS);
   Cmd = command->getV();
   Serial.print("T01 = "); //print the value to serial
   Serial.println(Cmd); //print the value to serial
