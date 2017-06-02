@@ -128,7 +128,9 @@ enum ParamListEnum
   // counts of square waves
   //
   WATER_FLOW_COUNTS = 300,
-  WATER_FLOW_TIME_RATIO = 301
+  WATER_FLOW_TIME_RATIO = 301,
+  SOIL_SONSER_HIGH = 302,
+  SOIL_SONSER_LOW = 303
 };
 
 /*

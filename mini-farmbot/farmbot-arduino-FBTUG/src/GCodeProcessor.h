@@ -46,6 +46,8 @@
 #include "F83Handler.h"
 #include "F84Handler.h"
 
+#include "T01Handler.h"
+
 class GCodeProcessor
 {
 public:

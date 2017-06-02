@@ -248,6 +248,9 @@ GCodeHandler *GCodeProcessor::getGCodeHandler(CommandCodeEnum codeEnum)
   {
     handler = F84Handler::getInstance();
   }
-
+  if (codeEnum == T01)
+  {
+    handler = T01Handler::getInstance();
+  }
   return handler;
 }

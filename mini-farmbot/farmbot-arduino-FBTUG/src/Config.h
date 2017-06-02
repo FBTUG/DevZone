@@ -177,12 +177,16 @@ const long MIN_WATER_SERVO_ANGLE = 0;
 //
 // Water flow counts of 1L (default)
 //
-const long WATER_FLOW_1L_COUNTS_DEFAULT = 5880;
+const long WATER_FLOW_1L_COUNTS_DEFAULT = 5200;
 
 //
 // Water flow time(ms) of 100mL (default)
 //
 const long WATER_FLOW_100ML_TIME_DEFAULT = 2635;
+
+const long SOIL_SONSER_HIGH_DEFAULT= 518;  // 0%
+const long SOIL_SONSER_LOW_DEFAULT= 250;   // 100%
+
 
 const String SOFTWARE_VERSION = "GENESIS V.01.07.EXPERIMENTAL_FBTUS_01";
 

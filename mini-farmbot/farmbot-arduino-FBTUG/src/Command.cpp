@@ -23,7 +23,7 @@ Command::Command(char *commandChar)
 
   charPointer = strtok(charBuf, " \n\r");
 
-  if (charPointer[0] == 'G' || charPointer[0] == 'F')
+  if (charPointer[0] == 'G' || charPointer[0] == 'F' || charPointer[0] == 'T' )
   {
     commandCodeEnum = getGCodeEnum(charPointer);
   }
@@ -152,6 +152,10 @@ CommandCodeEnum Command::getGCodeEnum(char *code)
   if (strcmp(code, "F84") == 0)
   {
     return F84;
+  }
+  if (strcmp(code, "T01") == 0 || strcmp(code, "T1") == 0)
+  {
+    return T01;
   }
 
   return CODE_UNDEFINED;

@@ -1,3 +1,14 @@
+Add T01 handle by Joe Hou
+==========================
+Support T01 command for Soil Sonser test
+Usage:
+"F42 P59 M1\n"  : Get Soil Sonser value.
+"F22 P302 V518" : Set High value of the Soil Sonser.
+"F22 P303 V250" : Set Low value of the Soil Sonser.
+
+"T01 V1\n" :  Enable the timer event to watching the Soil Sonser(%)
+"T01 V0\n" :  Dnable the timer event to close the Soil Sonser(%)
+
 Modify F01 handle by Joe Hou
 ==========================
 Support two commands (T & N)
@@ -335,6 +346,8 @@ ID   | Name
 223  | PIN_GUARD_5_ACTIVE_STATE
 300  | WATER_FLOW_COUNTS
 301  | WATER_FLOW_TIME_RATIO
+302  | SOIL_SONSER_HIGH
+303  | SOIL_SONSER_LOW
 
 IMPORTANT
 =========

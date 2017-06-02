@@ -54,6 +54,8 @@
 #define WATER_FLOW_PIN    20
 #define WATER_FLOW_INT    3
 
+#define SOIL_SENSOR_PIN    59  //Pin D59 (A5)
+
 #define DISABLE    0
 #define ENABLE     1
 
