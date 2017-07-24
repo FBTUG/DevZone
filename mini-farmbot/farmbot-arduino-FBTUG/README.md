@@ -1,3 +1,9 @@
+
+2017/07/24 upgrade code by JoeHou
+===========================
+Upgrade code to Farmbot 4.0.0 Branch(2017/07/09) code base
+
+
 Add T01 handle by Joe Hou
 ==========================
 Support T01 command for Soil Sensor test
