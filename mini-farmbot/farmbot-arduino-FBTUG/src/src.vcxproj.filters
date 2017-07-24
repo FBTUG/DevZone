@@ -152,6 +152,12 @@
     <ClInclude Include="CurrentState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="F01Handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude> 
+    <ClInclude Include="F02Handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>           
     <ClInclude Include="F11Handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -212,6 +218,9 @@
     <ClInclude Include="F84Handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="T01Handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>        
     <ClInclude Include="farmbot_arduino_controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -267,6 +276,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="F09Handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Board.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

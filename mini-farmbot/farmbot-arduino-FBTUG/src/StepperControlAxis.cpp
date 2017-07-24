@@ -30,6 +30,14 @@ StepperControlAxis::StepperControlAxis()
   movementCrawling = false;
   movementMotorActive = false;
   movementMoving = false;
+
+  stepIsOn = false;
+
+  setMotorStepWrite = &StepperControlAxis::setMotorStepWriteDefault;
+  setMotorStepWrite2 = &StepperControlAxis::setMotorStepWriteDefault2;
+  resetMotorStepWrite = &StepperControlAxis::resetMotorStepWriteDefault;
+  resetMotorStepWrite2 = &StepperControlAxis::resetMotorStepWriteDefault2;
+
 }
 
 void StepperControlAxis::test()
@@ -61,6 +69,8 @@ unsigned int StepperControlAxis::calculateSpeed(long sourcePosition, long curren
   movementCrawling = false;
   movementMoving = false;
 
+
+  /*
   if (abs(sourcePosition) < abs(destinationPosition))
   {
     staPos = abs(sourcePosition);
@@ -71,17 +81,33 @@ unsigned int StepperControlAxis::calculateSpeed(long sourcePosition, long curren
     staPos = abs(destinationPosition);
     endPos = abs(sourcePosition);
   }
+  */
 
-  /**/
+  // Set the possible negative coordinates to all positive numbers
+  // so the calculation code still works after the changes
+  staPos = 0;
+  endPos = abs(destinationPosition - sourcePosition);
+    
+  if (sourcePosition < destinationPosition)
+  {
+    curPos = currentPosition - sourcePosition;
+  }
+  else
+  {
+    curPos = currentPosition - destinationPosition;
+  }
+
+
   unsigned long halfway = ((endPos - staPos) / 2) + staPos;
   //unsigned long halfway = ((destinationPosition - sourcePosition) / 2) + sourcePosition;
 
   // Set the minimum speed if the position would be out of bounds
   if (
-        (curPos < staPos || curPos > endPos) || 
+        (curPos < staPos || curPos > endPos)
+        // || 
         // Also limit the speed to a crawl when the move would pass the home position
-        (sourcePosition > 0 && destinationPosition < 0) || (sourcePosition < 0 && destinationPosition > 0)
-       //(!motorHomeIsUp && currentPosition <= 0) || (motorHomeIsUp && currentPosition >= 0) ||)
+        // (sourcePosition > 0 && destinationPosition < 0) || (sourcePosition < 0 && destinationPosition > 0)
+        // (!motorHomeIsUp && currentPosition <= 0) || (motorHomeIsUp && currentPosition >= 0) ||)
      )
   {
     newSpeed = minSpeed;
@@ -189,7 +215,7 @@ void StepperControlAxis::checkAxisDirection()
 void StepperControlAxis::setDirectionAxis()
 {
 
-  if (((!coordHomeAxis && coordCurrentPoint < coordDestinationPoint) || (coordHomeAxis && motorHomeIsUp)) ^ motorMotorInv)
+  if (((!coordHomeAxis && coordCurrentPoint < coordDestinationPoint) || (coordHomeAxis && motorHomeIsUp)))
   {
     setDirectionUp();
   }
@@ -223,15 +249,15 @@ void StepperControlAxis::checkMovement()
       axisSpeed = calculateSpeed(coordSourcePoint, coordCurrentPoint, coordDestinationPoint,
                                  motorSpeedMin, motorSpeedMax, motorStepsAcc);
 
-      // Set the moments when the step is set to true and false
-      if (axisSpeed > 0)
-      {
+//      // Set the moments when the step is set to true and false
+//      if (axisSpeed > 0)
+//      {
 
         // Take the requested speed (steps / second) and divide by the interrupt speed (interrupts per seconde)
         // This gives the number of interrupts (called ticks here) before the pulse needs to be set for the next step
-        stepOnTick = moveTicks + (1000.0 * 1000.0 / motorInterruptSpeed / axisSpeed / 2);
-        stepOffTick = moveTicks + (1000.0 * 1000.0 / motorInterruptSpeed / axisSpeed);
-      }
+//        stepOnTick = moveTicks + (1000.0 * 1000.0 / motorInterruptSpeed / axisSpeed / 2);
+//        stepOffTick = moveTicks + (1000.0 * 1000.0 / motorInterruptSpeed / axisSpeed);
+//      }
     }
     else
     {
@@ -251,38 +277,59 @@ void StepperControlAxis::checkMovement()
   }
 }
 
+void StepperControlAxis::incrementTick()
+{
+  if (axisActive)
+  {
+    moveTicks++;
+    //moveTicks+=3;
+  }
+}
+
 void StepperControlAxis::checkTiming()
 {
 
   //int i;
 
-  if (axisActive)
+   // moveTicks++;
+  if (stepIsOn)
   {
-
-    moveTicks++;
-
     if (moveTicks >= stepOffTick)
     {
 
       // Negative flank for the steps
       resetMotorStep();
-      checkMovement();
+      setTicks();
+      //stepOnTick = moveTicks + (500000.0 / motorInterruptSpeed / axisSpeed);
     }
-    else
+  }
+  else
+  {
+    if (axisActive)
     {
-
-      if (moveTicks == stepOnTick)
+      if (moveTicks >= stepOnTick)
       {
 
         // Positive flank for the steps
         setStepAxis();
+        //stepOffTick = moveTicks + (1000000.0 / motorInterruptSpeed / axisSpeed);
       }
     }
   }
 }
 
+void StepperControlAxis::setTicks()
+{
+  // Take the requested speed (steps / second) and divide by the interrupt speed (interrupts per seconde)
+  // This gives the number of interrupts (called ticks here) before the pulse needs to be set for the next step
+  stepOnTick = moveTicks + (1000.0 * 1000.0 / motorInterruptSpeed / axisSpeed / 2);
+  stepOffTick = moveTicks + (1000.0 * 1000.0 / motorInterruptSpeed / axisSpeed);
+}
+
 void StepperControlAxis::setStepAxis()
 {
+
+  stepIsOn = true;
 
   if (movementUp)
   {
@@ -350,7 +397,7 @@ void StepperControlAxis::StepperControlAxis::loadPinNumbers(int step, int dir, i
 void StepperControlAxis::loadMotorSettings(
     long speedMax, long speedMin, long stepsAcc, long timeOut, bool homeIsUp, bool motorInv,
     bool endStInv, long interruptSpeed, bool motor2Enbl, bool motor2Inv, bool endStEnbl, 
-    bool stopAtHome, long maxSize)
+    bool stopAtHome, long maxSize, bool stopAtMax)
 {
 
   motorSpeedMax = speedMax;
@@ -366,6 +413,33 @@ void StepperControlAxis::loadMotorSettings(
   motorMotor2Inv = motor2Inv;
   motorStopAtHome = stopAtHome;
   motorMaxSize = maxSize;
+  motorStopAtMax = stopAtMax;
+
+  if (pinStep == 54)
+  {
+    setMotorStepWrite = &StepperControlAxis::setMotorStepWrite54;
+    resetMotorStepWrite = &StepperControlAxis::resetMotorStepWrite54;
+  }
+  
+  if (pinStep == 60)
+  {
+    setMotorStepWrite = &StepperControlAxis::setMotorStepWrite60;
+    resetMotorStepWrite = &StepperControlAxis::resetMotorStepWrite60;
+  }
+  
+
+  if (pinStep == 46)
+  {
+    setMotorStepWrite = &StepperControlAxis::setMotorStepWrite46;
+    resetMotorStepWrite = &StepperControlAxis::resetMotorStepWrite46;
+  }
+
+  if (pin2Step == 26)
+  {
+    setMotorStepWrite2 = &StepperControlAxis::setMotorStepWrite26;
+    resetMotorStepWrite2 = &StepperControlAxis::resetMotorStepWrite26;
+  }
+
 }
 
 void StepperControlAxis::loadCoordinates(long sourcePoint, long destinationPoint, bool home)
@@ -392,7 +466,7 @@ void StepperControlAxis::loadCoordinates(long sourcePoint, long destinationPoint
   }
 
   // limit the maximum size the bot can move, when there is a size present
-  if (motorMaxSize > 0)
+  if (motorMaxSize > 0 && motorStopAtMax)
   {
     if (abs(coordDestinationPoint) > abs(motorMaxSize))
     {
@@ -434,6 +508,7 @@ void StepperControlAxis::disableMotor()
 
 void StepperControlAxis::setDirectionUp()
 {
+
   if (motorMotorInv)
   {
     digitalWrite(pinDirection, LOW);
@@ -553,20 +628,30 @@ void StepperControlAxis::deactivateAxis()
 
 void StepperControlAxis::setMotorStep()
 {
-  digitalWrite(pinStep, HIGH);
+  stepIsOn = true;
+
+  //digitalWrite(pinStep, HIGH);
+  (this->*setMotorStepWrite)();
+
   if (pin2Enable)
   {
-    digitalWrite(pin2Step, HIGH);
+    (this->*setMotorStepWrite2)();
+    //digitalWrite(pin2Step, HIGH);
   }
 }
 
 void StepperControlAxis::resetMotorStep()
 {
+  stepIsOn = false;
   movementStepDone = true;
+
   digitalWrite(pinStep, LOW);
+  //(this->*resetMotorStepWrite)();
+
   if (pin2Enable)
   {
     digitalWrite(pin2Step, LOW);
+    //(this->*resetMotorStepWrite2)();
   }
 }
 
@@ -638,4 +723,79 @@ bool StepperControlAxis::isCrawling()
 bool StepperControlAxis::isMotorActive()
 {
   return movementMotorActive;
+}
+
+/// Functions for pin writing using alternative method
+
+// Pin write default functions
+void StepperControlAxis::setMotorStepWriteDefault()
+{
+  digitalWrite(pinStep, HIGH);
+}
+
+void StepperControlAxis::setMotorStepWriteDefault2()
+{
+  digitalWrite(pin2Step, HIGH);
+}
+
+void StepperControlAxis::resetMotorStepWriteDefault()
+{
+  digitalWrite(pinStep, LOW);
+}
+
+void StepperControlAxis::resetMotorStepWriteDefault2()
+{
+  digitalWrite(pin2Step, LOW);
+}
+
+// X step
+void StepperControlAxis::setMotorStepWrite54()
+{
+  //PF0
+  PORTF |= B00000001;
+}
+
+void StepperControlAxis::resetMotorStepWrite54()
+{
+  //PF0
+  PORTF &= B11111110;
+}
+
+
+// X step 2
+void StepperControlAxis::setMotorStepWrite26()
+{
+  //PA4
+  PORTA |= B00010000;
+}
+
+void StepperControlAxis::resetMotorStepWrite26()
+{
+  PORTA &= B11101111;
+}
+
+// Y step
+void StepperControlAxis::setMotorStepWrite60()
+{
+  //PF6
+  PORTF |= B01000000;
+}
+
+void StepperControlAxis::resetMotorStepWrite60()
+{
+  //PF6
+  PORTF &= B10111111;
+}
+
+// Z step
+void StepperControlAxis::setMotorStepWrite46()
+{
+  //PL3
+  PORTL |= B00001000;
+}
+
+void StepperControlAxis::resetMotorStepWrite46()
+{
+  //PL3
+  PORTL &= B11110111;
 }

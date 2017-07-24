@@ -63,7 +63,8 @@ void StepperControlEncoder::loadSettings(int encType, int scaling, int invert)
   {
     encoderInvert = 1;
   }
-  
+
+//  encoderType = 0; // TEVE 2017-04-20 Disabling the differential channels. They take too much time to read.
 }
 
 void StepperControlEncoder::setPosition(long newPosition)
@@ -73,9 +74,7 @@ void StepperControlEncoder::setPosition(long newPosition)
 
 long StepperControlEncoder::currentPosition()
 {
-
   // Apply scaling to the output of the encoder, except when scaling is zero or lower
-  //return position;
   if (scalingFactor == 100 || scalingFactor <= 0)
   {
     return position * encoderInvert;
@@ -86,7 +85,20 @@ long StepperControlEncoder::currentPosition()
   }
 }
 
-/* Check the encoder channels for movement accoridng to thisspecification
+long StepperControlEncoder::currentPositionRaw()
+{
+    return position * encoderInvert;
+}
+
+void StepperControlEncoder::checkEncoder(bool channelA, bool channelB, bool channelAQ, bool channelBQ)
+{
+  shiftChannels();
+  setChannels(channelA, channelB, channelAQ, channelBQ);
+  processEncoder();
+}
+
+
+/* Check the encoder channels for movement according to this specification
                     ________            ________
 Channel A          /        \          /        \
              _____/          \________/          \________
@@ -101,29 +113,31 @@ rotation ----------------------------------------------------->
 
 */
 
-void StepperControlEncoder::readEncoder()
+void StepperControlEncoder::processEncoder()
 {
 
   // save the old values, read the new values
-  shiftChannels();
-  readChannels();
+  // shiftChannels();
+  // readChannels();
 
-  int delta = 0;
+  //int delta = 0;
 
-  // and check for a position change
+  // check for a position change
   // no fancy code, just a few simple compares. sorry
 
-  //// Only detect edges on the A channel when the V channel is high
-  //if (curValChannelB == true && prvValChannelA == false && curValChannelA == true)
-  //{
-  //  delta--;
-  //}
-  //if (curValChannelB == true && prvValChannelA == true && curValChannelA == false)
-  //{
-  //  delta++;
-  //}
+  // Only detect edges on the A channel when the V channel is high
+  if (curValChannelB == true && prvValChannelA == false && curValChannelA == true)
+  {
+    //delta--;
+    position--;
+  }
+  if (curValChannelB == true && prvValChannelA == true && curValChannelA == false)
+  {
+    //delta++;
+    position++;
+  }
 
-  
+  /*
   if (prvValChannelA == true && curValChannelA == true && prvValChannelB == false && curValChannelB == true)
   {
     delta++;
@@ -157,9 +171,9 @@ void StepperControlEncoder::readEncoder()
   {
     delta--;
   }
-  
+  //*/
 
-  position += delta;
+  //position += delta;
 }
 
 void StepperControlEncoder::readChannels()
@@ -169,8 +183,6 @@ void StepperControlEncoder::readChannels()
 
   readChannelA = digitalRead(pinChannelA);
   readChannelB = digitalRead(pinChannelB);
-
-  encoderType = 0; // TEVE 2017-04-20 Disabling the quadrature channels. They take too much time to read.
 
   if (encoderType == 1)
   {
@@ -192,12 +204,28 @@ void StepperControlEncoder::readChannels()
     curValChannelA = readChannelA;
     curValChannelB = readChannelB;
   }
+}
 
-  //curValChannelA = readChannelA;
-  //curValChannelB = readChannelB;
+void StepperControlEncoder::setChannels(bool channelA, bool channelB, bool channelAQ, bool channelBQ)
+{
+  // read the new values from the coder
 
-  //	curValChannelA = digitalRead(pinChannelA);
-  //	curValChannelB = digitalRead(pinChannelB);
+  if (encoderType == 1)
+  {
+    // differential encoder
+    if ((channelA ^ channelAQ) && (channelB ^ channelBQ))
+    {
+      curValChannelA = channelA;
+      curValChannelB = channelB;
+    }
+  }
+  else
+  {
+    // encoderType <= 0
+    // non-differential incremental encoder
+    curValChannelA = channelA;
+    curValChannelB = channelB;
+  }
 }
 
 void StepperControlEncoder::shiftChannels()

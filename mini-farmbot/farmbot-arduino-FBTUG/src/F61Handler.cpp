@@ -26,7 +26,7 @@ F61Handler::F61Handler()
 
 int F61Handler::execute(Command *command)
 {
-  Serial.print("F61Handler");
+
   ServoControl::getInstance()->setAngle(command->getP(), command->getV());
 
   return 0;

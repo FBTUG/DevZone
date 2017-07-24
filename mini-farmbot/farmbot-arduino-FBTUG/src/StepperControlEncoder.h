@@ -27,9 +27,12 @@ public:
 
   void setPosition(long newPosition);
   long currentPosition();
+  long currentPositionRaw();
 
-  void readEncoder();
+  void checkEncoder(bool channelA, bool channelB, bool channelAQ, bool channelBQ);
+  void processEncoder();
   void readChannels();
+  void setChannels(bool channelA, bool channelB, bool channelAQ, bool channelBQ);
   void shiftChannels();
   void test();
 

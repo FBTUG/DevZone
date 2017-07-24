@@ -38,6 +38,12 @@ void blinkLed()
 //   - encoders
 //   - pin guard
 //
+
+unsigned long interruptStartTime = 0;
+unsigned long interruptStopTime = 0;
+unsigned long interruptDuration = 0;
+unsigned long interruptDurationMax = 0;
+
 bool interruptBusy = false;
 int interruptSecondTimer = 0;
 void interrupt(void)
@@ -48,16 +54,29 @@ void interrupt(void)
 
     if (interruptBusy == false)
     {
+      interruptStartTime = micros();
 
       interruptBusy = true;
       StepperControl::getInstance()->handleMovementInterrupt();
 
       // Check the actions triggered once per second
-      if (interruptSecondTimer >= 1000000 / MOVEMENT_INTERRUPT_SPEED)
+      //if (interruptSecondTimer >= 1000000 / MOVEMENT_INTERRUPT_SPEED)
+      //{
+      //  interruptSecondTimer = 0;
+      //  PinGuard::getInstance()->checkPins();
+      //  //blinkLed();
+      //}
+
+      interruptStopTime = micros();
+
+      if (interruptStopTime > interruptStartTime)
       {
-        interruptSecondTimer = 0;
-        PinGuard::getInstance()->checkPins();
-        //blinkLed();
+        interruptDuration = interruptStopTime - interruptStartTime;
+      }
+
+      if (interruptDuration > interruptDurationMax)
+      {
+        interruptDurationMax = interruptDuration;
       }
 
       interruptBusy = false;
@@ -65,45 +84,152 @@ void interrupt(void)
   }
 }
 
-//measure the quantity of square wave
-//void pulse() {
-//   waterFlow += 1.0 / 5880.0;
-//  waterFlow += 1.0 / 5880.0;
-//}
-
 //The setup function is called once at startup of the sketch
 void setup()
 {
 
-  // Setup pin input/output settings
-  pinMode(X_STEP_PIN, OUTPUT);
-  pinMode(X_DIR_PIN, OUTPUT);
-  pinMode(X_ENABLE_PIN, OUTPUT);
-  pinMode(E_STEP_PIN, OUTPUT);
-  pinMode(E_DIR_PIN, OUTPUT);
-  pinMode(E_ENABLE_PIN, OUTPUT);
-  pinMode(X_MIN_PIN, INPUT_PULLUP);
-  pinMode(X_MAX_PIN, INPUT_PULLUP);
+  #ifdef RAMPS_V14
 
-  pinMode(Y_STEP_PIN, OUTPUT);
-  pinMode(Y_DIR_PIN, OUTPUT);
-  pinMode(Y_ENABLE_PIN, OUTPUT);
-  pinMode(Y_MIN_PIN, INPUT_PULLUP);
-  pinMode(Y_MAX_PIN, INPUT_PULLUP);
+    // Setup pin input/output settings
+    pinMode(X_STEP_PIN, OUTPUT);
+    pinMode(X_DIR_PIN, OUTPUT);
+    pinMode(X_ENABLE_PIN, OUTPUT);
+    pinMode(E_STEP_PIN, OUTPUT);
+    pinMode(E_DIR_PIN, OUTPUT);
+    pinMode(E_ENABLE_PIN, OUTPUT);
+    pinMode(X_MIN_PIN, INPUT_PULLUP);
+    pinMode(X_MAX_PIN, INPUT_PULLUP);
 
-  pinMode(Z_STEP_PIN, OUTPUT);
-  pinMode(Z_DIR_PIN, OUTPUT);
-  pinMode(Z_ENABLE_PIN, OUTPUT);
-  pinMode(Z_MIN_PIN, INPUT_PULLUP);
-  pinMode(Z_MAX_PIN, INPUT_PULLUP);
+    pinMode(X_ENCDR_A, INPUT_PULLUP);
+    pinMode(X_ENCDR_B, INPUT_PULLUP);
+    pinMode(X_ENCDR_A_Q, INPUT_PULLUP);
+    pinMode(X_ENCDR_B_Q, INPUT_PULLUP);
 
-  pinMode(HEATER_0_PIN, OUTPUT);
-  pinMode(HEATER_1_PIN, OUTPUT);
-  pinMode(WATER_PIN, OUTPUT);
-  pinMode(LED_PIN, OUTPUT);
+    pinMode(Y_STEP_PIN, OUTPUT);
+    pinMode(Y_DIR_PIN, OUTPUT);
+    pinMode(Y_ENABLE_PIN, OUTPUT);
+    pinMode(Y_MIN_PIN, INPUT_PULLUP);
+    pinMode(Y_MAX_PIN, INPUT_PULLUP);
 
-  pinMode(SERVO_0_PIN , OUTPUT);
-  pinMode(SERVO_1_PIN , OUTPUT);
+    pinMode(Y_ENCDR_A, INPUT_PULLUP);
+    pinMode(Y_ENCDR_B, INPUT_PULLUP);
+    pinMode(Y_ENCDR_A_Q, INPUT_PULLUP);
+    pinMode(Y_ENCDR_B_Q, INPUT_PULLUP);
+
+    pinMode(Z_STEP_PIN, OUTPUT);
+    pinMode(Z_DIR_PIN, OUTPUT);
+    pinMode(Z_ENABLE_PIN, OUTPUT);
+    pinMode(Z_MIN_PIN, INPUT_PULLUP);
+    pinMode(Z_MAX_PIN, INPUT_PULLUP);
+
+    pinMode(Z_ENCDR_A, INPUT_PULLUP);
+    pinMode(Z_ENCDR_B, INPUT_PULLUP);
+    pinMode(Z_ENCDR_A_Q, INPUT_PULLUP);
+    pinMode(Z_ENCDR_B_Q, INPUT_PULLUP);
+
+    pinMode(FAN_PIN, OUTPUT);
+    pinMode(WATER_PIN, OUTPUT);
+    pinMode(VACUUM_PIN, OUTPUT);
+    pinMode(LED_PIN, OUTPUT);
+
+    pinMode(UTM_C, INPUT_PULLUP);
+    pinMode(UTM_D, INPUT_PULLUP);
+    pinMode(UTM_E, INPUT_PULLUP);
+    pinMode(UTM_F, INPUT_PULLUP);
+    pinMode(UTM_G, INPUT_PULLUP);
+    pinMode(UTM_H, INPUT_PULLUP);
+    pinMode(UTM_I, INPUT_PULLUP);
+    pinMode(UTM_J, INPUT_PULLUP);
+    pinMode(UTM_K, INPUT_PULLUP);
+    pinMode(UTM_L, INPUT_PULLUP);
+
+    // Aux 1 pins to safer state
+    pinMode(AUX1_00, INPUT_PULLUP);
+    pinMode(AUX1_01, INPUT_PULLUP);
+    pinMode(AUX1_57, INPUT_PULLUP);
+    pinMode(AUX1_58, INPUT_PULLUP);
+
+    // Aux 3 pins to safer state
+    pinMode(AUX3_49, INPUT_PULLUP);
+    pinMode(AUX3_50, INPUT_PULLUP);
+    pinMode(AUX3_51, INPUT_PULLUP);
+
+    // Aux 4 pins to safer state
+    pinMode(AUX4_43, INPUT_PULLUP);
+    pinMode(AUX4_45, INPUT_PULLUP);
+    pinMode(AUX4_47, INPUT_PULLUP);
+    pinMode(AUX4_32, INPUT_PULLUP);
+    pinMode(SERVO_0_PIN , OUTPUT);
+    pinMode(SERVO_1_PIN , OUTPUT);
+  #endif
+
+  #ifdef FARMDUINO_V10
+
+    // Setup pin input/output settings
+    pinMode(X_STEP_PIN, OUTPUT);
+    pinMode(X_DIR_PIN, OUTPUT);
+    pinMode(X_ENABLE_PIN, OUTPUT);
+    pinMode(E_STEP_PIN, OUTPUT);
+    pinMode(E_DIR_PIN, OUTPUT);
+    pinMode(E_ENABLE_PIN, OUTPUT);
+    pinMode(X_MIN_PIN, INPUT_PULLUP);
+    pinMode(X_MAX_PIN, INPUT_PULLUP);
+
+    pinMode(X_ENCDR_A, INPUT_PULLUP);
+    pinMode(X_ENCDR_B, INPUT_PULLUP);
+    pinMode(X_ENCDR_A_Q, INPUT_PULLUP);
+    pinMode(X_ENCDR_B_Q, INPUT_PULLUP);
+
+    pinMode(Y_STEP_PIN, OUTPUT);
+    pinMode(Y_DIR_PIN, OUTPUT);
+    pinMode(Y_ENABLE_PIN, OUTPUT);
+    pinMode(Y_MIN_PIN, INPUT_PULLUP);
+    pinMode(Y_MAX_PIN, INPUT_PULLUP);
+
+    pinMode(Y_ENCDR_A, INPUT_PULLUP);
+    pinMode(Y_ENCDR_B, INPUT_PULLUP);
+    pinMode(Y_ENCDR_A_Q, INPUT_PULLUP);
+    pinMode(Y_ENCDR_B_Q, INPUT_PULLUP);
+
+    pinMode(Z_STEP_PIN, OUTPUT);
+    pinMode(Z_DIR_PIN, OUTPUT);
+    pinMode(Z_ENABLE_PIN, OUTPUT);
+    pinMode(Z_MIN_PIN, INPUT_PULLUP);
+    pinMode(Z_MAX_PIN, INPUT_PULLUP);
+
+    pinMode(Z_ENCDR_A, INPUT_PULLUP);
+    pinMode(Z_ENCDR_B, INPUT_PULLUP);
+    pinMode(Z_ENCDR_A_Q, INPUT_PULLUP);
+    pinMode(Z_ENCDR_B_Q, INPUT_PULLUP);
+
+    //  pinMode(AUX_STEP_PIN, OUTPUT);
+    //  pinMode(AUX_DIR_PIN, OUTPUT);
+    //  pinMode(AUX_ENABLE_PIN, OUTPUT);
+
+    pinMode(LED_PIN, OUTPUT);
+    //  pinMode(VACUUM_PIN, OUTPUT);
+    //  pinMode(WATER_PIN, OUTPUT);
+    //  pinMode(LIGHTING_PIN, OUTPUT);
+    //  pinMode(PERIPHERAL_1_PIN, OUTPUT);
+    //  pinMode(PERIPHERAL_2_PIN, OUTPUT);
+
+    pinMode(UTM_C, INPUT_PULLUP);
+    pinMode(UTM_D, INPUT_PULLUP);
+    pinMode(UTM_E, INPUT_PULLUP);
+    pinMode(UTM_F, INPUT_PULLUP);
+    pinMode(UTM_G, INPUT_PULLUP);
+    pinMode(UTM_H, INPUT_PULLUP);
+    pinMode(UTM_I, INPUT_PULLUP);
+    pinMode(UTM_J, INPUT_PULLUP);
+    pinMode(UTM_K, INPUT_PULLUP);
+    pinMode(UTM_L, INPUT_PULLUP);
+
+    //  pinMode(SERVO_0_PIN, OUTPUT);
+    //  pinMode(SERVO_1_PIN, OUTPUT);
+    //  pinMode(SERVO_2_PIN, OUTPUT);
+    //  pinMode(SERVO_3_PIN, OUTPUT);
+
+  #endif
 
   digitalWrite(X_ENABLE_PIN, HIGH);
   digitalWrite(E_ENABLE_PIN, HIGH);
@@ -138,20 +264,25 @@ void setup()
   // Initialize the inactivity check
   lastAction = millis();
 
-  if (ParameterList::getInstance()->getValue(MOVEMENT_HOME_AT_BOOT_X) == 1)
+  if (ParameterList::getInstance()->getValue(MOVEMENT_HOME_AT_BOOT_Z) == 1)
   {
-    StepperControl::getInstance()->moveToCoords(0, 0, 0, 0, 0, 0, true, false, false);
+    Serial.print("R99 HOME Z ON STARTUP\r\n");
+    StepperControl::getInstance()->moveToCoords(0, 0, 0, 0, 0, 0, false, false, true);
   }
 
   if (ParameterList::getInstance()->getValue(MOVEMENT_HOME_AT_BOOT_Y) == 1)
   {
+    Serial.print("R99 HOME Y ON STARTUP\r\n");
     StepperControl::getInstance()->moveToCoords(0, 0, 0, 0, 0, 0, false, true, false);
   }
 
-  if (ParameterList::getInstance()->getValue(MOVEMENT_HOME_AT_BOOT_Z) == 1)
+  if (ParameterList::getInstance()->getValue(MOVEMENT_HOME_AT_BOOT_X) == 1)
   {
-    StepperControl::getInstance()->moveToCoords(0, 0, 0, 0, 0, 0, false, false, true);
+    Serial.print("R99 HOME X ON STARTUP\r\n");
+    StepperControl::getInstance()->moveToCoords(0, 0, 0, 0, 0, 0, true, false, false);
   }
+
+  Serial.print("R99 ARDUINO STARTUP COMPLETE\r\n");
 }
 
 // The loop function is called in an endless loop
@@ -232,7 +363,7 @@ void loop()
   // shut down the pins used
   if (previousEmergencyStop == false && CurrentState::getInstance()->isEmergencyStop())
   {
-    StepperControl::getInstance()->disableMotors();
+    StepperControl::getInstance()->disableMotorsEmergency();
     PinControl::getInstance()->resetPinsUsed();
     if (debugMessages)
     {
@@ -248,9 +379,12 @@ void loop()
   {
     lastParamChangeNr = ParameterList::getInstance()->paramChangeNumber();
 
-    Serial.print(COMM_REPORT_COMMENT);
-    Serial.print(" loading parameters ");
-    CurrentState::getInstance()->printQAndNewLine();
+    if (debugMessages)
+    {
+      Serial.print(COMM_REPORT_COMMENT);
+      Serial.print(" loading parameters");
+      CurrentState::getInstance()->printQAndNewLine();
+    }
 
     StepperControl::getInstance()->loadSettings();
     PinGuard::getInstance()->loadConfig();
@@ -293,6 +427,8 @@ void loop()
       StepperControl::getInstance()->storePosition();
       CurrentState::getInstance()->printPosition();
 
+      StepperControl::getInstance()->reportEncoders();
+
       CurrentState::getInstance()->storeEndStops();
       CurrentState::getInstance()->printEndStops();
 
@@ -304,9 +440,34 @@ void loop()
         CurrentState::getInstance()->printQAndNewLine();
 
         Serial.print(COMM_REPORT_COMMENT);
-        Serial.print(" Cycle ");
-        Serial.print(cycleCounter);
+        Serial.print(" IND DUR ");
+        Serial.print(interruptDuration);
+        Serial.print(" MAX ");
+        Serial.print(interruptDurationMax);
         CurrentState::getInstance()->printQAndNewLine();
+
+        //StepperControl::getInstance()->checkEncoders();
+        //Serial.print(COMM_REPORT_COMMENT);
+        //Serial.print(" Cycle ");
+        //Serial.print(cycleCounter);
+        //CurrentState::getInstance()->printQAndNewLine();
+
+
+//        Serial.print(COMM_REPORT_COMMENT);
+//        Serial.print(" 16 ");
+//        Serial.print(PORTH & 0x02);
+//        Serial.print(PH4);
+//        Serial.print(" ");
+//        Serial.print(PINH);
+//        Serial.print(" ");
+//        Serial.print(digitalRead(16));
+//        Serial.print(" ");
+//        Serial.print(" 17 ");
+//        Serial.print(PORTH & 0x01);
+//        Serial.print(PH5);
+//        Serial.print(" ");
+//        Serial.print(digitalRead(17));
+//        CurrentState::getInstance()->printQAndNewLine();
 
         StepperControl::getInstance()->test();
       }

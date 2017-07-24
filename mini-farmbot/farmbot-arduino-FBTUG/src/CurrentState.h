@@ -23,8 +23,12 @@ public:
   void setY(long);
   void setZ(long);
 
+  int getLastError();
+  void setLastError(int error);
+
   void setEndStopState(unsigned int, unsigned int, bool);
   void printPosition();
+  String getPosition();
   void storeEndStops();
   void printEndStops();
   void print();
@@ -33,6 +37,7 @@ public:
   void setQ(long);
   void resetQ();
   void printQAndNewLine();
+  String getQAndNewLine();
 
   void setEmergencyStop();
   void resetEmergencyStop();

@@ -19,6 +19,9 @@ enum ParamListEnum
   PARAM_TEST = 1,
   PARAM_CONFIG_OK = 2,
   PARAM_USE_EEPROM = 3,
+  PARAM_E_STOP_ON_MOV_ERR = 4,
+
+  PARAM_MOV_NR_RETRY = 5,
 
   // stepper motor settings
 
@@ -102,6 +105,11 @@ enum ParamListEnum
   MOVEMENT_AXIS_NR_STEPS_X = 141,
   MOVEMENT_AXIS_NR_STEPS_Y = 142,
   MOVEMENT_AXIS_NR_STEPS_Z = 143,
+
+  // stop at end of axis
+  MOVEMENT_STOP_AT_MAX_X = 145,
+  MOVEMENT_STOP_AT_MAX_Y = 146,
+  MOVEMENT_STOP_AT_MAX_Z = 147,
 
   // pin guard settings
   PIN_GUARD_1_PIN_NR = 201,

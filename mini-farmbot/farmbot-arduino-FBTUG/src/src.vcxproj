@@ -84,6 +84,8 @@
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="CurrentState.cpp" />
+    <ClCompile Include="F01Handler.cpp" />
+    <ClCompile Include="F02Handler.cpp" />    
     <ClCompile Include="F09Handler.cpp" />
     <ClCompile Include="F11Handler.cpp" />
     <ClCompile Include="F12Handler.cpp" />
@@ -105,6 +107,7 @@
     <ClCompile Include="F82Handler.cpp" />
     <ClCompile Include="F83Handler.cpp" />
     <ClCompile Include="F84Handler.cpp" />
+    <ClCompile Include="T01Handler.cpp" />
     <ClCompile Include="farmbot_arduino_controller.cpp" />
     <ClCompile Include="G00Handler.cpp" />
     <ClCompile Include="G28Handler.cpp" />
@@ -123,10 +126,13 @@
     <ClCompile Include="TimerOne.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Board.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="CurrentState.h" />
     <ClInclude Include="Debug.h" />
+    <ClCompile Include="F01Handler.cpp" />
+    <ClCompile Include="F02Handler.cpp" />       
     <ClInclude Include="F09Handler.h" />
     <ClInclude Include="F11Handler.h" />
     <ClInclude Include="F12Handler.h" />
@@ -148,6 +154,7 @@
     <ClInclude Include="F82Handler.h" />
     <ClInclude Include="F83Handler.h" />
     <ClInclude Include="F84Handler.h" />
+    <ClCompile Include="T01Handler.cpp" />    
     <ClInclude Include="farmbot_arduino_controller.h" />
     <ClInclude Include="G00Handler.h" />
     <ClInclude Include="G28Handler.h" />
@@ -173,7 +180,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties vm.programmer_name="avrisp" arduino.upload.port="COM3" />
+      <UserProperties vm.programmer_name="avrisp" arduino.upload.port="COM6" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

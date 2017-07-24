@@ -147,12 +147,12 @@ Z_ENCDR_A_Q      |  39  | Z axis encoder A channel for quarature (not implemente
 Z_ENCDR_B_Q      |  41  | Z axis encoder B channel for quarature (not implemented)
 LED_PIN          |  13  | on board LED
 WATER_PIN        |   9  | RAMPS board Water pin
-HEATER_0_PIN     |  10  | RAMPS board heating pin 0
-HEATER_1_PIN     |   8  | RAMPS board heating pin 1
+VACUUM_PIN       |  10  | RAMPS board heating pin 0
+FAN_PIN          |   8  | RAMPS board heating pin 1
 SERVO_0_PIN      |   4  | Servo motor 0 signal pin
 SERVO_1_PIN      |   5  | Servo motor 1 signal pin
-WATER_FLOW_PIN	 |   20 | Water flow sonser pin 20
-WATER_FLOW_INT	 |   3  | Water flow sonser pin Interrupt 3
+WATER_FLOW_PIN   |   20 | Water flow sonser pin 20
+WATER_FLOW_INT   |   3  | Water flow sonser pin Interrupt 3
 G-Codes
 -------
 
@@ -167,6 +167,7 @@ G        |28    |          |Move home all axis
 F        |      |          |Farm commands, commands specially added for the farmbot
 F        |01    |T  N      |Dose amount of water using time in millisecond  (ms/ml)
 F        |02    |N         |Dose amount of water using flow meter that measures pulses (ml)
+F        |09    |          |Reset emergency stop
 F        |11    |          |Home X axis
 F        |12    |          |Home Y axis
 F        |13    |          |Home Z axis
@@ -202,13 +203,16 @@ R        |03    |                 |Current command finished with error
 R        |04    |                 |Current command running
 R        |05    |                 |Report motor/axis state
 R        |06    |                 |Report calibration state during execution
+R        |07    |                 |Retry movement
 R        |20    |                 |Report all paramaters complete
 R        |21    |P V              |Report parameter value
 R        |31    |P V              |Report status value
 R        |41    |P V              |Report pin value
 R        |81    |X1 X2 Y1 Y2 Z1 Z2|Reporting end stops - parameters: X1 (end stop x axis min) X2 (end stop x axis max) Y1 Y2 Z1 Z2
-R        |82    |X Y Z     |Report current position
-R        |83    |C         |Report software version
+R        |82    |X Y Z            |Report current position
+R        |83    |C                |Report software version
+R        |84    |X Y Z            |Report encoder position scaled
+R        |85    |X Y Z            |Report encoder position raw
 R        |99    |C         |Debug message
 
 Axis states (R05)
@@ -270,6 +274,8 @@ ID   | Name
 -----|----------------------------
 2    | PARAM_CONFIG_OK
 3    | PARAM_USE_EEPROM
+4    | PARAM_E_STOP_ON_MOV_ERR [Not active]
+5    | PARAM_MOV_NR_RETRY
 11   | MOVEMENT_TIMEOUT_X
 12   | MOVEMENT_TIMEOUT_Y
 13   | MOVEMENT_TIMEOUT_Z
@@ -329,6 +335,9 @@ ID   | Name
 141  | MOVEMENT_AXIS_NR_STEPS_X
 142  | MOVEMENT_AXIS_NR_STEPS_Y
 143  | MOVEMENT_AXIS_NR_STEPS_Z
+145  | MOVEMENT_STOP_AT_MAX_X
+146  | MOVEMENT_STOP_AT_MAX_Y
+147  | MOVEMENT_STOP_AT_MAX_Z
 201  | PIN_GUARD_1_PIN_NR
 202  | PIN_GUARD_1_TIME_OUT
 203  | PIN_GUARD_1_ACTIVE_STATE

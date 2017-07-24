@@ -14,6 +14,7 @@ long z = 0;
 unsigned int speed = 0;
 bool endStopState[3][2];
 long Q = 0;
+int lastError = 0;
 
 CurrentState *CurrentState::getInstance()
 {
@@ -31,6 +32,7 @@ CurrentState::CurrentState()
   z = 0;
   speed = 0;
   Q = 0;
+  lastError = 0;
 }
 
 long CurrentState::getX()
@@ -69,6 +71,16 @@ void CurrentState::setZ(long newZ)
   z = newZ;
 }
 
+int CurrentState::getLastError()
+{
+  return lastError;
+}
+
+void CurrentState::setLastError(int error)
+{
+  lastError = error;
+}
+
 void CurrentState::setEndStopState(unsigned int axis, unsigned int position, bool state)
 {
   endStopState[axis][position] = state;
@@ -95,6 +107,22 @@ void CurrentState::printPosition()
   Serial.print(z);
   //	Serial.print("\r\n");
   printQAndNewLine();
+}
+
+String CurrentState::getPosition()
+{
+  String output = "";
+
+  output += "R82";
+  output += " X";
+  output += x;
+  output += " Y";
+  output += y;
+  output += " Z";
+  output += z;
+  //output += getQAndNewLine();
+
+  return output;
 }
 
 void CurrentState::printBool(bool value)
@@ -149,6 +177,17 @@ void CurrentState::printQAndNewLine()
   Serial.print(" Q");
   Serial.print(Q);
   Serial.print("\r\n");
+}
+
+String CurrentState::getQAndNewLine()
+{
+  String output = "";
+
+  output += " Q";
+  output += Q;
+  output += "\r\n";
+
+  return output;
 }
 
 void CurrentState::setEmergencyStop()

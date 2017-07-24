@@ -24,14 +24,16 @@ public:
   StepperControlAxis();
 
   void loadPinNumbers(int step, int dir, int enable, int min, int max, int step2, int dir2, int enable2);
-  void loadMotorSettings(long speedMax, long speedMin, long stepsAcc, long timeOut, bool homeIsUp, bool motorInv, bool endStInv, long interruptSpeed, bool motor2Enbl, bool motor2Inv, bool endStEnbl, bool stopAtHome, long maxSize);
+  void loadMotorSettings(long speedMax, long speedMin, long stepsAcc, long timeOut, bool homeIsUp, bool motorInv, bool endStInv, long interruptSpeed, bool motor2Enbl, bool motor2Inv, bool endStEnbl, bool stopAtHome, long maxSize, bool stopAtMax);
   void loadCoordinates(long sourcePoint, long destinationPoint, bool home);
   void setMaxSpeed(long speed);
 
   void enableMotor();
   void disableMotor();
   void checkMovement();
+  void incrementTick();
   void checkTiming();
+  void setTicks();
 
   bool isAxisActive();
   void deactivateAxis();
@@ -109,6 +111,7 @@ private:
   long motorInterruptSpeed; // period of interrupt in micro seconds
   bool motorStopAtHome;     // stop at home position or also use other side of the axis
   long motorMaxSize;        // maximum size of the axis
+  bool motorStopAtMax;      // stop at the maximum size
 
   // coordinates
   long coordSourcePoint; // all coordinated in steps
@@ -134,12 +137,31 @@ private:
   bool movementCrawling;
   bool movementMotorActive;
   bool movementMoving;
-
+  bool stepIsOn;
   void step(long &currentPoint, unsigned long steps, long destinationPoint);
   bool pointReached(long currentPoint, long destinationPoint);
   unsigned int calculateSpeed(long sourcePosition, long currentPosition, long destinationPosition, long minSpeed, long maxSpeed, long stepsAccDec);
   unsigned long getLength(long l1, long l2);
   void checkAxisDirection();
+
+  void (StepperControlAxis::*setMotorStepWrite)();
+  void (StepperControlAxis::*setMotorStepWrite2)();
+  void (StepperControlAxis::*resetMotorStepWrite)();
+  void (StepperControlAxis::*resetMotorStepWrite2)();
+
+
+  void setMotorStepWriteDefault();
+  void setMotorStepWriteDefault2();
+  void resetMotorStepWriteDefault();
+  void resetMotorStepWriteDefault2();
+  void setMotorStepWrite54();
+  void resetMotorStepWrite54();
+  void setMotorStepWrite26();
+  void resetMotorStepWrite26();
+  void setMotorStepWrite60();
+  void resetMotorStepWrite60();
+  void setMotorStepWrite46();
+  void resetMotorStepWrite46();
 
 };
 

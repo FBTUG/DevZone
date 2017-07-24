@@ -85,6 +85,7 @@ int ParameterList::writeValue(int id, int value)
     // Store the value in memory
     paramValues[id] = value;
     writeValueEeprom(id, value);
+    readValue(id);
   }
   else
   {
@@ -239,9 +240,14 @@ void ParameterList::loadDefaultValue(int id)
     paramValues[id] = PARAM_CONFIG_OK_DEFAULT;
     break;
   case PARAM_USE_EEPROM:
-    paramValues[id] = PARAM_USE_EEPROM;
+    paramValues[id] = PARAM_USE_EEPROM_DEFAULT;
     break;
-
+  case PARAM_E_STOP_ON_MOV_ERR:
+    paramValues[id] = PARAM_E_STOP_ON_MOV_ERR_DEFAULT;
+    break;
+  case PARAM_MOV_NR_RETRY:
+    paramValues[id] = PARAM_MOV_NR_RETRY_DEFAULT;
+    break;
   case MOVEMENT_TIMEOUT_X:
     paramValues[id] = MOVEMENT_TIMEOUT_X_DEFAULT;
     break;
@@ -357,6 +363,16 @@ void ParameterList::loadDefaultValue(int id)
     break;
   case MOVEMENT_MAX_SPD_Z:
     paramValues[id] = MOVEMENT_MAX_SPD_Z_DEFAULT;
+    break;
+
+  case MOVEMENT_STOP_AT_MAX_X:
+    paramValues[id] = MOVEMENT_STOP_AT_MAX_X_DEFAULT;
+    break;
+  case MOVEMENT_STOP_AT_MAX_Y:
+    paramValues[id] = MOVEMENT_STOP_AT_MAX_Y_DEFAULT;
+    break;
+  case MOVEMENT_STOP_AT_MAX_Z:
+    paramValues[id] = MOVEMENT_STOP_AT_MAX_Z_DEFAULT;
     break;
 
   case ENCODER_ENABLED_X:
@@ -505,6 +521,8 @@ bool ParameterList::validParam(int id)
   case PARAM_VERSION:
   case PARAM_CONFIG_OK:
   case PARAM_USE_EEPROM:
+  case PARAM_E_STOP_ON_MOV_ERR:
+  case PARAM_MOV_NR_RETRY:
   case MOVEMENT_TIMEOUT_X:
   case MOVEMENT_TIMEOUT_Y:
   case MOVEMENT_TIMEOUT_Z:
@@ -564,6 +582,9 @@ bool ParameterList::validParam(int id)
   case MOVEMENT_AXIS_NR_STEPS_X:
   case MOVEMENT_AXIS_NR_STEPS_Y:
   case MOVEMENT_AXIS_NR_STEPS_Z:
+  case MOVEMENT_STOP_AT_MAX_X:
+  case MOVEMENT_STOP_AT_MAX_Y:
+  case MOVEMENT_STOP_AT_MAX_Z:
   case PIN_GUARD_1_PIN_NR:
   case PIN_GUARD_1_TIME_OUT:
   case PIN_GUARD_1_ACTIVE_STATE:
