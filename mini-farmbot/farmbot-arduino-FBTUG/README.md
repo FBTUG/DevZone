@@ -149,9 +149,10 @@ LED_PIN          |  13  | on board LED
 WATER_PIN        |   9  | RAMPS board Water pin
 HEATER_0_PIN     |  10  | RAMPS board heating pin 0
 HEATER_1_PIN     |   8  | RAMPS board heating pin 1
-SERVO_0_PIN	     |   4  | Servo motor 0 signal pin
-SERVO_1_PIN	     |   5  | Servo motor 1 signal pin
-
+SERVO_0_PIN      |   4  | Servo motor 0 signal pin
+SERVO_1_PIN      |   5  | Servo motor 1 signal pin
+WATER_FLOW_PIN	 |   20 | Water flow sonser pin 20
+WATER_FLOW_INT	 |   3  | Water flow sonser pin Interrupt 3
 G-Codes
 -------
 
