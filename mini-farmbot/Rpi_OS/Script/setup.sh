@@ -16,7 +16,7 @@ cd ~
 
 # For Arduino
 #====================================================================
-sudo apt-get install arduino gcc-avr avr-libc avrdude python-configobj python-jinja2 python-serial
+sudo apt-get install -y arduino gcc-avr avr-libc avrdude python-configobj python-jinja2 python-serial
 cd FBTUG
 git clone https://github.com/miracle2k/python-glob2
 cd python-glob2
