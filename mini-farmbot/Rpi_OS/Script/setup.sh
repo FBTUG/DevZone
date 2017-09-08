@@ -1,19 +1,21 @@
-sudo apt-get install -y git
+sudo apt-get install git
 sudo apt-get update -y
 sudo apt-get upgrade -y
- 
+
 # Download FBTUS relatcd code to /tmp
+#====================================================================
 cd ~
-mkdir FBTUS
+mkdir FBTUG
 cd FBTUG
 git clone https://github.com/SpongeYao/StepperControl.git
-# Add below code into /Tmp/StepperControl/gui_main.py for support "sudo python gui_main.py" 
+# Add below code into /Tmp/StepperControl/gui_main.py for support "sudo python gui_main.py"
 # import sys
 # sys.path.append('/usr/local/lib/python2.7/site-packages')
 git clone https://github.com/FBTUG/DevZone.git
-cd ~ 
+cd ~
 
-# For Arduino:
+# For Arduino
+#====================================================================
 sudo apt-get install arduino gcc-avr avr-libc avrdude python-configobj python-jinja2 python-serial
 cd FBTUG
 git clone https://github.com/miracle2k/python-glob2
@@ -24,8 +26,8 @@ git clone git://github.com/amperka/ino.git
 cd ino
 sudo make install
 
-
-# for OpenCV 
+# for OpenCV
+#====================================================================
 sudo apt-get install -y build-essential cmake pkg-config
 sudo apt-get install -y libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
 sudo apt-get install -y libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
@@ -70,11 +72,9 @@ make -j4 (or make)
 sudo make install -y
 sudo ldconfig
 
+#====================================================================
 sudo apt-get install -y minicom
 sudo apt-get install -y screen
 
 cat ./FBTUG/DevZone/mini-farmbot/Rpi_OS/Script/bashrc_change >> ~/.bashrc
-
-
-
 
