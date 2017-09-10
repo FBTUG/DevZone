@@ -68,7 +68,9 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 -D INSTALL_PYTHON_EXAMPLES=ON \
 -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib-3.1.0/modules \
 -D BUILD_EXAMPLES=ON ..
-make -j4 (or make)
+make -j4
+# make clean
+# make (If compiler failed by 'make -j4')
 sudo make install -y
 sudo ldconfig
 
