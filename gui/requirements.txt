@@ -1,0 +1,9 @@
+Django==1.11.4
+Pillow==4.2.1
+argparse==1.2.1
+image==1.5.11
+numpy==1.13.1
+olefile==0.44
+pyserial==3.4
+pytz==2017.2
+wsgiref==0.1.2
