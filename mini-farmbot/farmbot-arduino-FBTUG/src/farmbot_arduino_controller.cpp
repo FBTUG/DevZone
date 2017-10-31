@@ -127,21 +127,27 @@ void setup()
     pinMode(Z_ENCDR_A_Q, INPUT_PULLUP);
     pinMode(Z_ENCDR_B_Q, INPUT_PULLUP);
 
+//
+// Changed by FBTUG (mini farmbot)
+//
     pinMode(FAN_PIN, OUTPUT);
     pinMode(WATER_PIN, OUTPUT);
     pinMode(VACUUM_PIN, OUTPUT);
     pinMode(LED_PIN, OUTPUT);
 
     pinMode(UTM_C, INPUT_PULLUP);
-    pinMode(UTM_D, INPUT_PULLUP);
-    pinMode(UTM_E, INPUT_PULLUP);
-    pinMode(UTM_F, INPUT_PULLUP);
-    pinMode(UTM_G, INPUT_PULLUP);
-    pinMode(UTM_H, INPUT_PULLUP);
-    pinMode(UTM_I, INPUT_PULLUP);
-    pinMode(UTM_J, INPUT_PULLUP);
-    pinMode(UTM_K, INPUT_PULLUP);
-    pinMode(UTM_L, INPUT_PULLUP);
+//
+// Remove the pullup to incorrect values reported by analogRead()
+//
+//    pinMode(UTM_D, INPUT_PULLUP);
+//    pinMode(UTM_E, INPUT_PULLUP);
+//    pinMode(UTM_F, INPUT_PULLUP);
+//    pinMode(UTM_G, INPUT_PULLUP);
+//    pinMode(UTM_H, INPUT_PULLUP);
+//    pinMode(UTM_I, INPUT_PULLUP);
+//    pinMode(UTM_J, INPUT_PULLUP);
+//    pinMode(UTM_K, INPUT_PULLUP);
+//    pinMode(UTM_L, INPUT_PULLUP);
 
     // Aux 1 pins to safer state
     pinMode(AUX1_00, INPUT_PULLUP);
@@ -202,16 +208,17 @@ void setup()
     pinMode(Z_ENCDR_A_Q, INPUT_PULLUP);
     pinMode(Z_ENCDR_B_Q, INPUT_PULLUP);
 
-    //  pinMode(AUX_STEP_PIN, OUTPUT);
-    //  pinMode(AUX_DIR_PIN, OUTPUT);
-    //  pinMode(AUX_ENABLE_PIN, OUTPUT);
+    pinMode(AUX_STEP_PIN, OUTPUT);
+    pinMode(AUX_DIR_PIN, OUTPUT);
+    pinMode(AUX_ENABLE_PIN, OUTPUT);
+    digitalWrite(AUX_ENABLE_PIN, HIGH);
 
     pinMode(LED_PIN, OUTPUT);
-    //  pinMode(VACUUM_PIN, OUTPUT);
-    //  pinMode(WATER_PIN, OUTPUT);
-    //  pinMode(LIGHTING_PIN, OUTPUT);
-    //  pinMode(PERIPHERAL_1_PIN, OUTPUT);
-    //  pinMode(PERIPHERAL_2_PIN, OUTPUT);
+    pinMode(VACUUM_PIN, OUTPUT);
+    pinMode(WATER_PIN, OUTPUT);
+    pinMode(LIGHTING_PIN, OUTPUT);
+    pinMode(PERIPHERAL_4_PIN, OUTPUT);
+    pinMode(PERIPHERAL_5_PIN, OUTPUT);
 
     pinMode(UTM_C, INPUT_PULLUP);
     pinMode(UTM_D, INPUT_PULLUP);
@@ -224,10 +231,10 @@ void setup()
     pinMode(UTM_K, INPUT_PULLUP);
     pinMode(UTM_L, INPUT_PULLUP);
 
-    //  pinMode(SERVO_0_PIN, OUTPUT);
-    //  pinMode(SERVO_1_PIN, OUTPUT);
-    //  pinMode(SERVO_2_PIN, OUTPUT);
-    //  pinMode(SERVO_3_PIN, OUTPUT);
+    pinMode(SERVO_0_PIN, OUTPUT);
+    pinMode(SERVO_1_PIN, OUTPUT);
+    pinMode(SERVO_2_PIN, OUTPUT);
+    pinMode(SERVO_3_PIN, OUTPUT);
 
   #endif
 
@@ -285,6 +292,9 @@ void setup()
   Serial.print("R99 ARDUINO STARTUP COMPLETE\r\n");
 }
 
+//char commandIn[100];
+char commandChar[INCOMING_CMD_BUF_SIZE + 1];
+
 // The loop function is called in an endless loop
 void loop()
 {
@@ -325,25 +335,33 @@ void loop()
     if (incomingChar == '\n' || incomingCommandPointer >= INCOMING_CMD_BUF_SIZE)
     {
 
-      char commandChar[incomingCommandPointer + 1];
+      //char commandChar[incomingCommandPointer + 1];
       for (int i = 0; i < incomingCommandPointer - 1; i++)
       {
-        if (incomingChar)
-        commandChar[i] = incomingCommandArray[i];
+          commandChar[i] = incomingCommandArray[i];
       }
-      commandChar[incomingCommandPointer] = 0;
+      commandChar[incomingCommandPointer-1] = '\0';
 
       if (incomingCommandPointer > 1)
       {
 
-        // Copy the command to another string object.
-        // because there are issues with passing the
-        // string to the command object
+        // Report back the received command
+        Serial.print(COMM_REPORT_CMD_ECHO);
+        Serial.print(" ");
+        Serial.print("*");
+        Serial.print(commandChar);
+        Serial.print("*");
+        Serial.print("\r\n");
 
         // Create a command and let it execute
         //Command* command = new Command(commandString);
         Command *command = new Command(commandChar);
 
+        //strcpy()
+        //commandEcho
+
+
+        // Log the values if needed for debugging
         if (LOGGING || debugMessages)
         {
           command->print();

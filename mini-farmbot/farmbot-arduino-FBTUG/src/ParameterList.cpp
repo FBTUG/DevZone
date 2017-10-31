@@ -345,6 +345,16 @@ void ParameterList::loadDefaultValue(int id)
     paramValues[id] = MOVEMENT_HOME_UP_Z_DEFAULT;
     break;
 
+  case MOVEMENT_STEP_PER_MM_X:
+    paramValues[id] = MOVEMENT_STEP_PER_MM_X_DEFAULT;
+    break;
+  case MOVEMENT_STEP_PER_MM_Y:
+    paramValues[id] = MOVEMENT_STEP_PER_MM_Y_DEFAULT;
+    break;
+  case MOVEMENT_STEP_PER_MM_Z:
+    paramValues[id] = MOVEMENT_STEP_PER_MM_Z_DEFAULT;
+    break;
+
   case MOVEMENT_MIN_SPD_X:
     paramValues[id] = MOVEMENT_MIN_SPD_X_DEFAULT;
     break;
@@ -353,6 +363,16 @@ void ParameterList::loadDefaultValue(int id)
     break;
   case MOVEMENT_MIN_SPD_Z:
     paramValues[id] = MOVEMENT_MIN_SPD_Z_DEFAULT;
+    break;
+
+  case MOVEMENT_HOME_SPEED_X:
+    paramValues[id] = MOVEMENT_HOME_SPEED_X_DEFAULT;
+    break;
+  case MOVEMENT_HOME_SPEED_Y:
+    paramValues[id] = MOVEMENT_HOME_SPEED_Y_DEFAULT;
+    break;
+  case MOVEMENT_HOME_SPEED_Z:
+    paramValues[id] = MOVEMENT_HOME_SPEED_Z_DEFAULT;
     break;
 
   case MOVEMENT_MAX_SPD_X:
@@ -494,6 +514,9 @@ void ParameterList::loadDefaultValue(int id)
   case PIN_GUARD_5_ACTIVE_STATE:
     paramValues[id] = PIN_GUARD_5_ACTIVE_STATE_DEFAULT;
     break;
+//
+// Added by FBTUG
+//
   case WATER_FLOW_COUNTS:
     paramValues[id] = WATER_FLOW_1L_COUNTS_DEFAULT;
     break;
@@ -552,9 +575,15 @@ bool ParameterList::validParam(int id)
   case MOVEMENT_HOME_UP_X:
   case MOVEMENT_HOME_UP_Y:
   case MOVEMENT_HOME_UP_Z:
+  case MOVEMENT_STEP_PER_MM_X:
+  case MOVEMENT_STEP_PER_MM_Y:
+  case MOVEMENT_STEP_PER_MM_Z:
   case MOVEMENT_MIN_SPD_X:
   case MOVEMENT_MIN_SPD_Y:
   case MOVEMENT_MIN_SPD_Z:
+  case MOVEMENT_HOME_SPEED_X:
+  case MOVEMENT_HOME_SPEED_Y:
+  case MOVEMENT_HOME_SPEED_Z:
   case MOVEMENT_MAX_SPD_X:
   case MOVEMENT_MAX_SPD_Y:
   case MOVEMENT_MAX_SPD_Z:
@@ -600,6 +629,9 @@ bool ParameterList::validParam(int id)
   case PIN_GUARD_5_PIN_NR:
   case PIN_GUARD_5_TIME_OUT:
   case PIN_GUARD_5_ACTIVE_STATE:
+//
+// Added by FBTUG
+//
   case WATER_FLOW_COUNTS:
   case WATER_FLOW_TIME_RATIO:
   case SOIL_SENSOR_HIGH:

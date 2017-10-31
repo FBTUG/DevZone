@@ -31,7 +31,7 @@ public:
   //int moveAbsolute(	long xDest, long yDest,long zDest,
   //			unsigned int maxStepsPerSecond,
   //			unsigned int maxAccelerationStepsPerSecond);
-  int moveToCoords(long xDest, long yDest, long zDest,
+  int moveToCoords(double xDestScaled, double yDestScaled, double zDestScaled,
                    unsigned int xMaxSpd, unsigned int yMaxSpd, unsigned int zMaxSpd,
                    bool homeX, bool homeY, bool homeZ);
 
@@ -105,6 +105,7 @@ private:
   bool homeIsUp[3] = {false, false, false};
   long speedMax[3] = {0, 0, 0 };
   long speedMin[3] = { 0, 0, 0 };
+  long speedHome[3] = { 0, 0, 0 };
   long stepsAcc[3] = { 0, 0, 0 };
   bool motorInv[3] = { false, false, false };
   long motorMaxSize[3] = { 0, 0, 0};
@@ -116,6 +117,7 @@ private:
   bool endStInv[3] = { false, false, false };
   bool endStEnbl[3] = { false, false, false };
   long timeOut[3] = { 0, 0, 0 };
+  long stepsPerMm[3] = { 1.0, 1.0, 1.0 };
 
   float motorConsMissedSteps[3] = { 0, 0, 0 };
   int motorConsMissedStepsPrev[3] = { 0, 0, 0 };
