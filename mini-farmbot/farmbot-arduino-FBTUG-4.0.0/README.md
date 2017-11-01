@@ -1,8 +1,13 @@
-//
-// Use Farmbot tag 4.0 (stable version) to implement mini farmbot feature
-//
-// Bugs fixed and changed default value
-//
+Modify by Joe Hou
+==========================
+1. Enable Endstop.
+2. Set the Speed of XYZ to 3500 (original speed is 400)
+3. Use "NO" of endstop to replace original one(NC)-- please rollback this solution if your endstop is NC.
+
+Modify by Joe Hou
+==========================
+Use Farmbot tag 4.0 (stable version) to implement mini farmbot feature
+
 1. Remove the pullup to prevent incorrect values reported by analogRead()
    ex: UTM D -- Soil Sensor.
        Add pinMode to INPUT_PULLUP will caused incorrect value reported by analogRead()
