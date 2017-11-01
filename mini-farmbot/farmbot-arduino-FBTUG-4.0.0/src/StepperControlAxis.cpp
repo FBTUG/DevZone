@@ -563,19 +563,19 @@ unsigned long StepperControlAxis::getLength(long l1, long l2)
 
 bool StepperControlAxis::endStopsReached()
 {
-  return ((digitalRead(pinMin) == motorEndStopInv) || (digitalRead(pinMax) == motorEndStopInv)) && motorEndStopEnbl;
+  return ((!digitalRead(pinMin) == motorEndStopInv) || (!digitalRead(pinMax) == motorEndStopInv)) && motorEndStopEnbl;
 }
 
 bool StepperControlAxis::endStopMin()
 {
   //return ((digitalRead(pinMin) == motorEndStopInv) || (digitalRead(pinMax) == motorEndStopInv));
-  return digitalRead(pinMin) && motorEndStopEnbl;
+  return !digitalRead(pinMin) && motorEndStopEnbl;
 }
 
 bool StepperControlAxis::endStopMax()
 {
   //return ((digitalRead(pinMin) == motorEndStopInv) || (digitalRead(pinMax) == motorEndStopInv));
-  return digitalRead(pinMax) && motorEndStopEnbl;
+  return !digitalRead(pinMax) && motorEndStopEnbl;
 }
 
 bool StepperControlAxis::isAxisActive()
