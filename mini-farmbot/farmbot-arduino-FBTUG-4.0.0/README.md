@@ -3,6 +3,7 @@ Modify by Joe Hou
 1. Enable Endstop.
 2. Set the Speed of XYZ to 3500 (original speed is 400)
 3. Use "NO" of endstop to replace original one(NC)-- please rollback this solution if your endstop is NC.
+4. Add back the G28 home command
 
 Modify by Joe Hou
 ==========================
@@ -22,7 +23,7 @@ Support T01 command for Soil Sensor test
 1. "F42 P59 M1\n"  : Get Soil Sensor value.
 2. "F22 P302 V518" : Set High value of the Soil Sensor.
 3. "F22 P303 V250" : Set Low value of the Soil Sensor.
-4. "T01 V1\n" :  Enable the timer event to watching the Soil Sensor(%)
+4. "T01 V1\n" :  Enable the timer event to monitor the Soil Sensor(%)
 5. "T01 V0\n" :  Dnable the timer event to close the Soil Sensor(%)
 
 Modify F01 handle by Joe Hou
