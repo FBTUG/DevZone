@@ -1,0 +1,17 @@
+#Watering Example
+G00 X0 Y0 Z0 #Move to location at given speed for axis (don't have to be a straight line), in absolute coordinates
+F41 P9 V1 M0
+C00
+G00 X0 Y9000 Z0 #Move to location at given speed for axis (don't have to be a straight line), in absolute coordinates
+F41 P9 V0 M0
+G00 X0 Y4500 Z0 #Move to location at given speed for axis (don't have to be a straight line), in absolute coordinates
+F41 P9 V1 M0
+F41 P9 V0 M0
+C00
+G00 X0 Y0 Z0 #Move to location at given speed for axis (don't have to be a straight line), in absolute coordinates
+
+
+
+
+
+
