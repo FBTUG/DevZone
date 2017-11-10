@@ -1,4 +1,4 @@
-Offlien GUI of Farmbot for Development
+FBTUG Commander for Development
 ==========================
 ![GUI of gui_main.py](./Manual/Introduction.png)  
 ![GUI of gui_main.py](./Manual/gui_function.png)
