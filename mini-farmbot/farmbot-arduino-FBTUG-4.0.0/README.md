@@ -1,5 +1,11 @@
 Modify by Joe Hou
 ==========================
+Add P304 for switch endstop type
+Ex: F22 P304 V1 --> For NC (Normal close) endstop.
+    F22 P304 V0 --> For NO (Normal open) endstop.
+
+Modify by Joe Hou
+==========================
 1. Enable Endstop.
 2. Set the Speed of XYZ to 3500 (original speed is 400)
 3. Use "NO" of endstop to replace original one(NC)-- please rollback this solution if your endstop is NC.
