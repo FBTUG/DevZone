@@ -563,19 +563,35 @@ unsigned long StepperControlAxis::getLength(long l1, long l2)
 
 bool StepperControlAxis::endStopsReached()
 {
-  return ((!digitalRead(pinMin) == motorEndStopInv) || (!digitalRead(pinMax) == motorEndStopInv)) && motorEndStopEnbl;
+  bool EndStopNC;
+  EndStopNC = ParameterList::getInstance()->getValue(END_STOP_NC_ENABLE);
+  if (EndStopNC) {
+    return ((digitalRead(pinMin) == motorEndStopInv) || (digitalRead(pinMax) == motorEndStopInv)) && motorEndStopEnbl;
+  } else {
+    return ((!digitalRead(pinMin) == motorEndStopInv) || (!digitalRead(pinMax) == motorEndStopInv)) && motorEndStopEnbl;
+  }
 }
 
 bool StepperControlAxis::endStopMin()
 {
-  //return ((digitalRead(pinMin) == motorEndStopInv) || (digitalRead(pinMax) == motorEndStopInv));
-  return !digitalRead(pinMin) && motorEndStopEnbl;
+  bool EndStopNC;
+  EndStopNC = ParameterList::getInstance()->getValue(END_STOP_NC_ENABLE); 
+  if (EndStopNC) {
+    return digitalRead(pinMin) && motorEndStopEnbl;    
+  } else {
+    return !digitalRead(pinMin) && motorEndStopEnbl;    
+  }
 }
 
 bool StepperControlAxis::endStopMax()
 {
-  //return ((digitalRead(pinMin) == motorEndStopInv) || (digitalRead(pinMax) == motorEndStopInv));
-  return !digitalRead(pinMax) && motorEndStopEnbl;
+  bool EndStopNC;
+  EndStopNC = ParameterList::getInstance()->getValue(END_STOP_NC_ENABLE);  
+  if (EndStopNC) {
+    return digitalRead(pinMax) && motorEndStopEnbl;   
+  } else {
+    return !digitalRead(pinMax) && motorEndStopEnbl;    
+  }
 }
 
 bool StepperControlAxis::isAxisActive()

@@ -197,4 +197,7 @@ const long WATER_FLOW_100ML_TIME_DEFAULT = 2635;
 
 const long SOIL_SENSOR_HIGH_DEFAULT= 518;  // 0%
 const long SOIL_SENSOR_LOW_DEFAULT= 250;   // 100%
+
+const long END_STOP_NC_ENABLE_DEFAULT = 1;
+
 #endif /* CONFIG_H_ */

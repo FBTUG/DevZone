@@ -506,6 +506,9 @@ void ParameterList::loadDefaultValue(int id)
   case SOIL_SENSOR_LOW:
     paramValues[id] = SOIL_SENSOR_LOW_DEFAULT;
     break;
+  case END_STOP_NC_ENABLE:
+    paramValues[id] = END_STOP_NC_ENABLE_DEFAULT;
+    break;
   default:
     paramValues[id] = 0;
     break;
@@ -606,6 +609,7 @@ bool ParameterList::validParam(int id)
   case WATER_FLOW_TIME_RATIO:
   case SOIL_SENSOR_HIGH:
   case SOIL_SENSOR_LOW:
+  case END_STOP_NC_ENABLE:
     return true;
   default:
     return false;
