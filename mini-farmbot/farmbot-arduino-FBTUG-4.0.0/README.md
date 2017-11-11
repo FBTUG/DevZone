@@ -1,8 +1,9 @@
 Modify by Joe Hou
 ==========================
-Add P304 for switch endstop type
-Ex: F22 P304 V1 --> For NC (Normal close) endstop.
-    F22 P304 V0 --> For NO (Normal open) endstop.
+Add P304 for switch endstop type \
+Ex:  \
+F22 P304 V1 --> For NC (Normal close) endstop.\
+F22 P304 V0 --> For NO (Normal open) endstop.
 
 Modify by Joe Hou
 ==========================
