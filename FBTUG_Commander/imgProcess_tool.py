@@ -5,7 +5,6 @@ import numpy as np
 import Tkinter as tk
 import tkFont
 import json
-import sys 
 from os import listdir, path, makedirs, remove
 from PIL import Image
 from PIL import ImageTk
@@ -137,18 +136,36 @@ def findContours(arg_img,arg_canvas, arg_MinMaxArea=False, arg_debug= False):
     image= arg_img.copy()
     #print image
     canvas= arg_canvas.copy()
-    if len(image)==3:
-        image = cv2.cvtColor(self.image, cv2.COLOR_GRAY2BGR)
-    if sys.version_info.major == 2: 
-        ctrs, hier = cv2.findContours(image.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    else:
-        _, ctrs, hier = cv2.findContours(image.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+#
+#  Modify below code for image "findContours" on Rpi3 OS
+#	
+    if len(image.shape)==3:
+        image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+    _, ctrs, hier= cv2.findContours(image.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     if arg_MinMaxArea is not False:
-        ctrs = filter(lambda x : arg_MinMaxArea[1]> cv2.contourArea(x) > arg_MinMaxArea[0] , ctrs)
-    
+        list_ctrs= []
+        for ctr in ctrs:
+            if arg_MinMaxArea[1]> cv2.contourArea(ctr) > arg_MinMaxArea[0]:
+                list_ctrs.append(ctr)
     print '>>> ', len(ctrs)
-    for ctr in ctrs:
+
+    for ctr in list_ctrs:
+#
+#   Below code can work on Ubuntu NB, but it failed on Rpi3 OS
+#
+#    if len(image)==3:
+#        image = cv2.cvtColor(self.image, cv2.COLOR_GRAY2BGR)
+#    if sys.version_info.major == 2: 
+#        ctrs, hier = cv2.findContours(image.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+#    else:
+#        _, ctrs, hier = cv2.findContours(image.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+#
+#   if arg_MinMaxArea is not False:
+#        ctrs = filter(lambda x : arg_MinMaxArea[1]> cv2.contourArea(x) > arg_MinMaxArea[0] , ctrs)
+    
+#    print '>>> ', len(ctrs)
+#    for ctr in ctrs:
         print 'Area: ', cv2.contourArea(ctr)
         cv2.drawContours(canvas, [ctr], 0, (0, 128, 255), 3)
     if arg_debug:

@@ -926,7 +926,7 @@ class App:
             print 'Watering... '
     def btn_Light_click(self):
         if self.ArdMntr.connect:
-            self.ArdMntr.switch_Seed(self.pinNumb_fan, not(self.ArdMntr.LightOn))
+            self.ArdMntr.switch_Light(self.pinNumb_fan, not(self.ArdMntr.LightOn))
             print 'Lighting... '
             pass 
 

@@ -160,7 +160,7 @@ class MonitorThread(threading.Thread):
         else:
             self.serial_send('F41 P{0} V0 M0'.format(arg_pinNumb))
             self.SeedOn= False
-    def switch_Light(self, arg_pinNumb=8, arg_on=True):
+    def switch_Light(self, arg_pinNumb=8, arg_On=True):
         if arg_On:
             self.serial_send('F41 P{0} V1 M0'.format(arg_pinNumb))
             self.LightOn= True
