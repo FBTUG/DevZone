@@ -1,0 +1,35 @@
+version: '2'
+services:
+  fapi :
+    build: web-app
+    image: jarvischung/farmbot-webapp
+    environment:
+      - HOSTIP=your_domain_or_ip
+      - PGHOST=localhost
+      - PGPORT=5432
+      - PGUSER=farmbot
+      - PGPASS=farmbot1234
+      - PGDBNAME=farmbot
+      - WSPORT=15675 #if not use host mode, please setup this port to 3002
+    ports:
+      - "3000:3000"
+      - "3808:3808"  
+    command: sh -c '/start.sh'
+    #command: sh -c 'while true; do sleep 1000; done'
+    network_mode: "host" #For QNAP product, please use host mode.
+  mqtt :
+    build: mqtt
+    image: jarvischung/farmbot-mqtt
+    environment:
+      - APIHOST=your_domain_or_ip
+      - APIPORT=3000
+      - PKAPIURL=http://your_domain_or_ip:3000/api/public_key
+      - VHOST=/
+    ports:
+      - "5672:5672"
+      - "1883:1883"
+      - "8883:8883"
+      - "3002:15675"
+    command: sh -c '/start.sh'
+    #command: sh -c 'while true; do sleep 1000; done'
+    network_mode: "host"  #For QNAP product, please use host mode.

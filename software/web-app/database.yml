@@ -1,0 +1,20 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  database: pgsql-dbname
+  pool: 5
+  username: pgsql-user
+  password: pgsql-pass
+  host: pgsql-host
+
+development:
+  database: farmbot_development
+  <<: *default
+
+test:
+  database: farmbot_test
+  <<: *default
+
+production:
+  database: pgsql-dbname
+  <<: *default
