@@ -1,7 +1,7 @@
-FROM ruby:2.4.2
+FROM ruby:2.5.1
 
 RUN apt-get update
-RUN apt-get install -y apt-transport-https sudo
+RUN apt-get install -y apt-transport-https sudo libssl-dev
 
 # Install Postgresql
 ENV PG_APP_HOME="/etc/docker-postgresql"\
@@ -16,7 +16,7 @@ ENV PG_BINDIR=/usr/lib/postgresql/${PG_VERSION}/bin \
     PG_DATADIR=${PG_HOME}/${PG_VERSION}/main
 
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-    && echo 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
+    && echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y acl \
         postgresql-${PG_VERSION} postgresql-client-${PG_VERSION} postgresql-contrib-${PG_VERSION} \
@@ -47,7 +47,7 @@ RUN apt-get install -y libpq-dev # postgresql-contrib
 # Install FarmBot Web App
 WORKDIR /opt
 #RUN git clone https://github.com/FarmBot/Farmbot-Web-App -b master --depth=10
-RUN wget "https://github.com/FarmBot/Farmbot-Web-App/archive/v6.1.1.tar.gz" -O farmbot-web-app.tar.gz
+RUN wget "https://github.com/FarmBot/Farmbot-Web-App/archive/v6.4.2.tar.gz" -O farmbot-web-app.tar.gz
 RUN tar -xvf farmbot-web-app.tar.gz
 RUN mv /opt/Farmbot-Web-App-* /opt/Farmbot-Web-App
 

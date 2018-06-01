@@ -44,6 +44,10 @@ if [ ! -f "/init_finish" ]; then
 fi
 
 if [ ! -f "/init_finish" ]; then
+   echo "Rake keys......"
+   rake keys:generate
+   mkdir /keys
+   cp jwt.development.pem /keys/production.pem 
    rake db:create:all db:migrate db:seed
 fi
 

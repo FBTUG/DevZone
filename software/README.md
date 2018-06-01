@@ -1,5 +1,5 @@
 # farmbot-docker
-## This service uses [Farmbot-Web-App open source](https://github.com/FarmBot/Farmbot-Web-App). The software version is v6.1.1.
+## This service uses [Farmbot-Web-App open source](https://github.com/FarmBot/Farmbot-Web-App). The software version is v6.4.2.
 ## Please check and modify docker-compose.yml before execute them. ##
 ```docker
 # For fapi
